@@ -1,0 +1,1 @@
+enum SudokuTimeMode { countdown, timer }
