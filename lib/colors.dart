@@ -14,4 +14,5 @@ class SudokuColors {
   static const Color firefly = Color(0xff081123);
   static const Color freshAir = Color(0xffB1D5FF);
   static const Color malibuDarker = Color(0xff6BAFFF);
+  static const Color roseBud = Color(0xffFCAEAE);
 }

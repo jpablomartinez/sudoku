@@ -6,6 +6,7 @@ import 'package:sudoku/controllers/game_controller.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/time_mode.dart';
 import 'package:sudoku/widgets/action_button.dart';
+import 'package:sudoku/widgets/end_game_dialog.dart';
 import 'package:sudoku/widgets/game_alert_dialog.dart';
 import 'package:sudoku/widgets/number_button.dart';
 import 'package:sudoku/widgets/rounded_button.dart';
@@ -39,6 +40,11 @@ class _GameViewState extends State<GameView> {
       });
     });*/
     super.initState();
+  }
+
+  Size getSizeForDialog(double percentageWidth, double percentageHeight) {
+    Size size = MediaQuery.of(context).size;
+    return Size(size.width * percentageWidth, size.height * percentageHeight);
   }
 
   String formatTimer(int timer) {
@@ -143,6 +149,117 @@ class _GameViewState extends State<GameView> {
     }
   }
 
+  Future<void> openWinDialog() {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return EndgameDialog(
+          title: '¡HAS GANADO!',
+          time: '01:22',
+          imgPath: 'assets/images/blueWin.jpg',
+          points: 3,
+          primaryColor: SudokuColors.dodgerBlueDarker,
+          secondaryColor: SudokuColors.onahu,
+          imgSize: getSizeForDialog(0.74, 0.22),
+          dialogSize: getSizeForDialog(0.93, 0.58),
+          curve: Curves.easeOutQuint,
+          rightButton: () {},
+          leftButton: () {},
+          maxPoints: 5,
+        );
+      },
+    );
+  }
+
+  Future<void> openGameOverDialog() {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return EndgameDialog(
+          curve: Curves.easeOutQuint,
+          title: '¡HAS PERDIDO!',
+          time: '01:22',
+          imgPath: 'assets/images/red-gameover.jpg',
+          points: 0,
+          primaryColor: SudokuColors.rose,
+          secondaryColor: SudokuColors.roseBud,
+          imgSize: getSizeForDialog(0.74, 0.25),
+          dialogSize: getSizeForDialog(0.93, 0.58),
+          leftButton: () {},
+          rightButton: () {},
+          maxPoints: 5, //gameController.sudoku.maxPossibleErrors!,
+        );
+      },
+    );
+  }
+
+  Future<void> openEndgameDialog() {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return GameAlertDialog(
+          title: 'SUDOKU MENÚ',
+          content: '¿Deseas salir del juego actual?',
+          imgPath: 'assets/images/menu.png',
+          widget: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () => closeDialog(),
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: SudokuColors.rose),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: DefaultTextStyle(
+                          style: GoogleFonts.gluten(
+                            fontSize: 16,
+                            color: SudokuColors.rose,
+                          ),
+                          child: const Text('NO'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: SudokuColors.congressBlue),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: DefaultTextStyle(
+                          style: GoogleFonts.gluten(
+                            fontSize: 16,
+                            color: SudokuColors.congressBlue,
+                          ),
+                          child: const Text('SI'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          curve: Curves.easeOutQuint,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -150,7 +267,7 @@ class _GameViewState extends State<GameView> {
       body: Container(
         width: size.width,
         height: size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg-blue.png'),
           ),
@@ -159,7 +276,7 @@ class _GameViewState extends State<GameView> {
           children: [
             Container(
               height: size.height * 0.4,
-              color: SudokuColors.dodgerBlue,
+              color: SudokuColors.dodgerBlue.withOpacity(0.82),
             ),
             Positioned(
               top: 0,
@@ -178,69 +295,9 @@ class _GameViewState extends State<GameView> {
                             'assets/icons/home.png',
                             width: 22,
                           ),
-                          onTap: () {
+                          onTap: () async {
                             gameController.pauseGame();
-                            showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return GameAlertDialog(
-                                    title: 'SUDOKU MENÚ',
-                                    content: '¿Deseas salir del juego actual?',
-                                    imgPath: 'assets/images/menu.png',
-                                    widget: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () => closeDialog(),
-                                              child: Container(
-                                                height: 40,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: SudokuColors.rose),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Center(
-                                                  child: DefaultTextStyle(
-                                                    style: GoogleFonts.gluten(
-                                                      fontSize: 16,
-                                                      color: SudokuColors.rose,
-                                                    ),
-                                                    child: const Text('NO'),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                height: 40,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: SudokuColors.congressBlue),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Center(
-                                                  child: DefaultTextStyle(
-                                                    style: GoogleFonts.gluten(
-                                                      fontSize: 16,
-                                                      color: SudokuColors.congressBlue,
-                                                    ),
-                                                    child: const Text('SI'),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    curve: Curves.easeOutQuint,
-                                  );
-                                });
+                            await openWinDialog();
                           },
                           size: const Size(42, 42),
                         ),
