@@ -10,6 +10,7 @@ import 'package:sudoku/widgets/end_game_dialog.dart';
 import 'package:sudoku/widgets/game_alert_dialog.dart';
 import 'package:sudoku/widgets/number_button.dart';
 import 'package:sudoku/widgets/rounded_button.dart';
+import 'package:sudoku/widgets/star.dart';
 import 'package:sudoku/widgets/sudoku_cell_widget.dart';
 
 class GameView extends StatefulWidget {
@@ -27,6 +28,7 @@ class GameView extends StatefulWidget {
 
 class _GameViewState extends State<GameView> {
   late GameController gameController;
+  Widget stars = const SizedBox();
   Widget board = const SizedBox();
   String timer = '00:00';
 
@@ -34,23 +36,30 @@ class _GameViewState extends State<GameView> {
   void initState() {
     gameController = GameController(widget.difficulty);
     board = createSudokuBoard();
-    /*gameController.timer.startCountdown(const Duration(seconds: 1), () {
-      setState(() {
-        timer = formatTimer(gameController.timer.remaining);
+    stars = getStars();
+    if (widget.timeMode == SudokuTimeMode.timer) {
+      gameController.timer.startTimer(const Duration(seconds: 1), () {
+        setState(() {
+          timer = gameController.formatTimer(gameController.timer.time);
+        });
       });
-    });*/
+    } else {
+      gameController.timer.startCountdown(const Duration(seconds: 1), () {
+        setState(() {
+          timer = gameController.formatTimer(gameController.timer.remaining);
+        });
+        if (gameController.timer.remaining == 0) {
+          gameController.stopGame();
+          openGameOverDialog();
+        }
+      });
+    }
     super.initState();
   }
 
   Size getSizeForDialog(double percentageWidth, double percentageHeight) {
     Size size = MediaQuery.of(context).size;
     return Size(size.width * percentageWidth, size.height * percentageHeight);
-  }
-
-  String formatTimer(int timer) {
-    String m = '${timer ~/ 60}'.padLeft(2, '0');
-    String s = '${timer % 60}'.padLeft(2, '0');
-    return '$m:$s';
   }
 
   void erase() {
@@ -77,6 +86,15 @@ class _GameViewState extends State<GameView> {
     gameController.writeNumberOnCell(value);
     setState(() {
       board = createSudokuBoard();
+    });
+    if (gameController.gameover()) {
+      gameController.stopGame();
+      openGameOverDialog();
+    } else if (gameController.wonGame()) {
+      openWinDialog();
+    }
+    setState(() {
+      stars = getStars();
     });
   }
 
@@ -149,6 +167,27 @@ class _GameViewState extends State<GameView> {
     }
   }
 
+  Widget getStars() {
+    List<Widget> stars = [];
+    for (int i = gameController.sudoku.maxPossibleErrors!; i > 0; i--) {
+      if (i > gameController.opportunities) {
+        stars.add(const StarWidget(
+          isFull: false,
+          height: 20,
+        ));
+      } else {
+        stars.add(const StarWidget(
+          isFull: true,
+          height: 20,
+        ));
+      }
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: stars,
+    );
+  }
+
   Future<void> openWinDialog() {
     return showDialog(
       context: context,
@@ -158,14 +197,17 @@ class _GameViewState extends State<GameView> {
           title: '¡HAS GANADO!',
           time: '01:22',
           imgPath: 'assets/images/blueWin.jpg',
-          points: 3,
+          points: gameController.opportunities,
           primaryColor: SudokuColors.dodgerBlueDarker,
           secondaryColor: SudokuColors.onahu,
           imgSize: getSizeForDialog(0.74, 0.22),
           dialogSize: getSizeForDialog(0.93, 0.58),
           curve: Curves.easeOutQuint,
           rightButton: () {},
-          leftButton: () {},
+          leftButton: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
           maxPoints: 5,
         );
       },
@@ -187,7 +229,10 @@ class _GameViewState extends State<GameView> {
           secondaryColor: SudokuColors.roseBud,
           imgSize: getSizeForDialog(0.74, 0.25),
           dialogSize: getSizeForDialog(0.93, 0.58),
-          leftButton: () {},
+          leftButton: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
           rightButton: () {},
           maxPoints: 5, //gameController.sudoku.maxPossibleErrors!,
         );
@@ -196,6 +241,7 @@ class _GameViewState extends State<GameView> {
   }
 
   Future<void> openEndgameDialog() {
+    gameController.timer.pause();
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -331,6 +377,7 @@ class _GameViewState extends State<GameView> {
                     ),
                     const SizedBox(height: 40),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         DefaultTextStyle(
                           style: GoogleFonts.gluten(
@@ -338,7 +385,8 @@ class _GameViewState extends State<GameView> {
                             color: Colors.white,
                           ),
                           child: Text('Dificultad: ${showDifficculty()}'),
-                        )
+                        ),
+                        stars,
                       ],
                     ),
                     const SizedBox(height: 10),

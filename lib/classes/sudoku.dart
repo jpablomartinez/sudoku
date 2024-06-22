@@ -10,7 +10,7 @@ class Sudoku {
   Sudoku.easy() {
     maxEreaseAction = 5;
     availableHints = 5;
-    maxPossibleErrors = 3;
+    maxPossibleErrors = 5;
     countdown = 180; //im not sure
     maxVisibleValues = maxEasyLevel;
   }
@@ -18,7 +18,7 @@ class Sudoku {
   Sudoku.medium() {
     maxEreaseAction = 4;
     availableHints = 3;
-    maxPossibleErrors = 3;
+    maxPossibleErrors = 5;
     countdown = 180; //im not sure
     maxVisibleValues = maxMediumLevel;
   }
@@ -26,7 +26,7 @@ class Sudoku {
   Sudoku.hard() {
     maxEreaseAction = 3;
     availableHints = 0;
-    maxPossibleErrors = 2;
+    maxPossibleErrors = 5;
     countdown = 180; //im not sure
     maxVisibleValues = maxHardLevel;
   }

@@ -14,7 +14,7 @@ class GameController {
   late Sudoku sudoku;
   late SudokuGenerator sudokuGenerator;
   late Countdown timer;
-  Configuration configuration = Configuration(true, false, false, false);
+  Configuration configuration = Configuration(true, true, false, false);
   SudokuDifficulty? difficulty;
   bool showGuideline = false;
   bool availableErrors = true;
@@ -26,6 +26,7 @@ class GameController {
   List<int> indexVisibleValues = [];
   int countdown = 0;
   GameState state = GameState.play;
+  int opportunities = 0;
 
   void setGameDifficulty(SudokuDifficulty d) {
     difficulty = d;
@@ -79,6 +80,7 @@ class GameController {
     showSudokuBoard();
     countdown = sudoku.countdown ?? 180;
     timer = Countdown(countdown);
+    opportunities = sudoku.maxPossibleErrors!;
   }
 
   void clearSelection() {
@@ -139,6 +141,18 @@ class GameController {
         sudokuCells[selectedCell].value = value;
         sudokuCells[selectedCell].annotations = [];
       }
+      bool isWrong = checkWrongNumber(value);
+      if (isWrong) {
+        opportunities--;
+        if (opportunities == 0) {
+          state = GameState.gameover;
+        }
+      } else {
+        bool won = checkWin();
+        if (won) {
+          state = GameState.won;
+        }
+      }
     }
   }
 
@@ -148,5 +162,64 @@ class GameController {
 
   void playGame() {
     state = GameState.play;
+  }
+
+  bool valueIsInRow(int value) {
+    int inf = selectedCell - selectedCell % 9;
+    int sup = inf + 8;
+    return sudokuCells.sublist(inf, sup + 1).where((k) => k.value == value).length >= 2;
+  }
+
+  bool valueIsInCol(int value) {
+    int cnt = 0;
+    for (int i = selectedCell % 9; i < 81; i += 9) {
+      if (sudokuCells[i].value == value) cnt++;
+    }
+    return cnt >= 2;
+  }
+
+  bool valueIsInSubMatrix(
+    int value,
+  ) {
+    int cnt = 0;
+    int rowStart = (selectedCell ~/ 9) ~/ 3 * 3;
+    int colStart = (selectedCell % 9) ~/ 3 * 3;
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        if (sudokuCells[(rowStart + i) * 9 + (colStart + j)].value == value) {
+          cnt++;
+        }
+      }
+    }
+    return cnt == 2;
+  }
+
+  bool checkWin() {
+    return sudokuCells.indexWhere((c) => c.value == 0) == -1;
+  }
+
+  bool checkWrongNumber(value) {
+    return valueIsInRow(value) || valueIsInCol(value) || valueIsInSubMatrix(value);
+  }
+
+  bool gameover() {
+    return state == GameState.gameover;
+  }
+
+  bool wonGame() {
+    return state == GameState.won;
+  }
+
+  void restartGame() {}
+
+  String formatTimer(int timer) {
+    String m = '${timer ~/ 60}'.padLeft(2, '0');
+    String s = '${timer % 60}'.padLeft(2, '0');
+    return '$m:$s';
+  }
+
+  void stopGame() {
+    timer.pause();
+    state = GameState.gameover;
   }
 }
