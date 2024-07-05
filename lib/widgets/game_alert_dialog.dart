@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 
 class GameAlertDialog extends StatefulWidget {
@@ -45,7 +44,7 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
 
   Size getSizeOrientationMobile(Size s) {
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      return Size(s.width * 0.75, 360);
+      return Size(s.width * 0.78, 385);
     } else {
       return Size(360, s.height * 0.75);
     }
@@ -85,9 +84,9 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  DefaultTextStyle(
-                    style: GoogleFonts.averiaGruesaLibre(fontSize: 20, color: SudokuColors.dodgerBlueDarker),
-                    child: Text(widget.title),
+                  Text(
+                    widget.title,
+                    style: const TextStyle(fontSize: 20, color: SudokuColors.dodgerBlueDarker),
                   ),
                   widget.imgPath != ''
                       ? Center(
@@ -99,9 +98,9 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
                           ),
                         )
                       : const SizedBox(),
-                  DefaultTextStyle(
-                    style: GoogleFonts.averiaGruesaLibre(fontSize: 18, color: SudokuColors.dodgerBlueDarker),
-                    child: Text(widget.content),
+                  Text(
+                    widget.content,
+                    style: const TextStyle(fontSize: 18, color: SudokuColors.dodgerBlueDarker),
                   ),
                   const SizedBox(height: 15),
                   widget.widget,

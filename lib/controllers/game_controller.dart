@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:sudoku/classes/configuration.dart';
 import 'package:sudoku/classes/countdown.dart';
 import 'package:sudoku/classes/sudoku.dart';
@@ -8,6 +7,7 @@ import 'package:sudoku/controllers/sudoku_generator.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/game_state.dart';
 import 'package:sudoku/utils/states.dart';
+import 'package:vibration/vibration.dart';
 
 class GameController {
   final Random random = Random();
@@ -21,12 +21,13 @@ class GameController {
   List<SudokuCell> sudokuCells = [];
   int selectedCell = -1;
   bool writeAnnotation = false;
-  int remainingEreaseAction = -1;
+  //int remainingEreaseAction = -1;
   int remainingHintsAction = -1;
   List<int> indexVisibleValues = [];
   int countdown = 0;
   GameState state = GameState.play;
   int opportunities = 0;
+  List<bool> availableNumberButtons = [];
 
   void setGameDifficulty(SudokuDifficulty d) {
     difficulty = d;
@@ -63,6 +64,7 @@ class GameController {
         fixValueOnBoard(i);
         countVisibleValues++;
       }
+      sudokuCells[i].correctValue = sudokuGenerator.sudokuCells[i];
     }
   }
 
@@ -75,9 +77,10 @@ class GameController {
     setGameDifficulty(difficulty);
     prepareSudokuGenerator();
     sudokuCells = List.generate(81, (int index) => SudokuCell(index, SudokuCellState.normal, annotations: []));
-    remainingEreaseAction = sudoku.maxEreaseAction!;
+    //remainingEreaseAction = sudoku.maxEreaseAction!;
     remainingHintsAction = sudoku.availableHints!;
     showSudokuBoard();
+    availableNumberButtons = List.generate(9, (int index) => true);
     countdown = sudoku.countdown ?? 180;
     timer = Countdown(countdown);
     opportunities = sudoku.maxPossibleErrors!;
@@ -114,7 +117,7 @@ class GameController {
   }
 
   void erase() {
-    if (remainingEreaseAction > 0 && sudokuCells[selectedCell].canEreaseValue) {
+    if (sudokuCells[selectedCell].canEreaseValue) {
       if (sudokuCells[selectedCell].annotations!.isNotEmpty) {
         int l = sudokuCells[selectedCell].annotations!.length;
         if (l == 1) {
@@ -125,10 +128,23 @@ class GameController {
       } else {
         if (sudokuCells[selectedCell].value > 0) {
           sudokuCells[selectedCell].value = 0;
-          remainingEreaseAction--;
+          sudokuCells[selectedCell].badIndex = false;
         }
       }
     }
+  }
+
+  void showHint() {
+    if (sudokuCells[selectedCell].value == 0) {
+      sudokuCells[selectedCell].value = sudokuCells[selectedCell].correctValue;
+      sudokuCells[selectedCell].canEreaseValue = false;
+      sudokuCells[selectedCell].hightlight = true;
+      remainingHintsAction--;
+    }
+  }
+
+  bool countNumbersOnMatrix(int value) {
+    return sudokuCells.where((s) => s.value == value).toList().length < 9;
   }
 
   void writeNumberOnCell(int value) {
@@ -144,13 +160,18 @@ class GameController {
       bool isWrong = checkWrongNumber(value);
       if (isWrong) {
         opportunities--;
+        vibrate();
         if (opportunities == 0) {
           state = GameState.gameover;
         }
+        sudokuCells[selectedCell].badIndex = true;
       } else {
         bool won = checkWin();
         if (won) {
           state = GameState.won;
+        }
+        for (int i = 0; i < 9; i++) {
+          availableNumberButtons[i] = countNumbersOnMatrix(i + 1);
         }
       }
     }
@@ -158,6 +179,7 @@ class GameController {
 
   void pauseGame() {
     state = GameState.paused;
+    timer.pause();
   }
 
   void playGame() {
@@ -194,12 +216,23 @@ class GameController {
     return cnt == 2;
   }
 
+  bool valueIsCorrect(int value) {
+    print('VALUE: $value');
+    print('ORIGINAL: ${sudokuCells[selectedCell].correctValue}');
+    return value != sudokuCells[selectedCell].correctValue;
+  }
+
   bool checkWin() {
     return sudokuCells.indexWhere((c) => c.value == 0) == -1;
   }
 
   bool checkWrongNumber(value) {
-    return valueIsInRow(value) || valueIsInCol(value) || valueIsInSubMatrix(value);
+    //first check configuration
+    //if strategic game is active, then only check if value is in row, col or submatrix
+    //else check if value is equal to correct value;
+    //for now, jump to valueIsCorrect
+    //return valueIsInRow(value) || valueIsInCol(value) || valueIsInSubMatrix(value);
+    return valueIsCorrect(value);
   }
 
   bool gameover() {
@@ -208,6 +241,10 @@ class GameController {
 
   bool wonGame() {
     return state == GameState.won;
+  }
+
+  bool isPlaying() {
+    return state == GameState.play;
   }
 
   void restartGame() {}
@@ -221,5 +258,23 @@ class GameController {
   void stopGame() {
     timer.pause();
     state = GameState.gameover;
+  }
+
+  Future<void> vibrate() async {
+    if (await Vibration.hasVibrator() != null) {
+      Vibration.vibrate(duration: 500);
+    }
+  }
+
+  void restart() {
+    sudokuCells = [];
+    prepareSudokuGenerator();
+    sudokuCells = List.generate(81, (int index) => SudokuCell(index, SudokuCellState.normal, annotations: []));
+    remainingHintsAction = sudoku.availableHints!;
+    showSudokuBoard();
+    availableNumberButtons = List.generate(9, (int index) => true);
+    countdown = sudoku.countdown ?? 180;
+    timer = Countdown(countdown);
+    opportunities = sudoku.maxPossibleErrors!;
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
+import 'package:sudoku/controllers/audio_controller.dart';
 import 'package:sudoku/screens/game_modes.dart';
+import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/square_button.dart';
 
 class TitleScreen extends StatefulWidget {
@@ -12,6 +13,14 @@ class TitleScreen extends StatefulWidget {
 }
 
 class _TitleScreenState extends State<TitleScreen> {
+  late AudioController audioController;
+
+  @override
+  void initState() {
+    audioController = AudioController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,9 +49,9 @@ class _TitleScreenState extends State<TitleScreen> {
                       color: SudokuColors.onahu,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Sudoku',
-                      style: GoogleFonts.gluten(
+                      style: TextStyle(
                         color: SudokuColors.dodgerBlueDarker,
                         fontSize: 50,
                       ),
@@ -54,37 +63,37 @@ class _TitleScreenState extends State<TitleScreen> {
                     width: size.width * 0.75,
                     decoration: BoxDecoration(
                       color: SudokuColors.onahu,
-                      border: Border.all(
+                      /*border: Border.all(
                         color: SudokuColors.dodgerBlueDarker,
                         width: 3,
-                      ),
+                      ),*/
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
+                      /*boxShadow: const [
                         BoxShadow(
                           color: SudokuColors.dodgerBlueDarker,
                           offset: Offset(0, 4),
                         ),
-                      ],
+                      ],*/
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SquareButton(
-                          backgroundColor: SudokuColors.dodgerBlueDarker,
-                          borderColor: SudokuColors.dodgerBlueDarker,
-                          labelColor: Colors.white,
-                          label: 'Jugar',
-                          icon: const Icon(
-                            Icons.play_arrow_rounded,
-                            color: Colors.white,
-                            size: 33,
-                          ),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const GameModes(),
+                            backgroundColor: SudokuColors.dodgerBlueDarker,
+                            borderColor: SudokuColors.dodgerBlueDarker,
+                            labelColor: Colors.white,
+                            label: 'Jugar',
+                            icon: const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                              size: 33,
                             ),
-                          ),
-                        ),
+                            onTap: () {
+                              //audioController.playSelectAudio();
+                              Navigator.of(context).push(
+                                FadeRoute(page: const GameModes()),
+                              );
+                            }),
                         SquareButton(
                           backgroundColor: Colors.white,
                           borderColor: SudokuColors.dodgerBlueDarker,
@@ -118,10 +127,10 @@ class _TitleScreenState extends State<TitleScreen> {
                 width: size.width,
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  'JK STUDIOS',
-                  style: GoogleFonts.gluten(
-                    fontSize: 20,
+                child: const Text(
+                  'JK STUDIOS - versión 0.3',
+                  style: TextStyle(
+                    fontSize: 14,
                     color: SudokuColors.dodgerBlueDarker,
                   ),
                 ),

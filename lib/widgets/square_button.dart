@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 
 class SquareButton extends StatelessWidget {
@@ -34,7 +33,7 @@ class SquareButton extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               color: borderColor,
-              width: 5,
+              width: 2,
             ),
             top: BorderSide(
               color: borderColor,
@@ -42,11 +41,11 @@ class SquareButton extends StatelessWidget {
             ),
             left: BorderSide(
               color: borderColor,
-              width: 3,
+              width: 1,
             ),
             right: BorderSide(
               color: borderColor,
-              width: 3,
+              width: 1,
             ),
           ),
           borderRadius: BorderRadius.circular(10),
@@ -68,12 +67,12 @@ class SquareButton extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.center,
-              child: DefaultTextStyle(
-                style: GoogleFonts.gluten(
+              child: Text(
+                label,
+                style: TextStyle(
                   color: labelColor,
                   fontSize: 24,
                 ),
-                child: Text(label),
               ),
             )
           ],

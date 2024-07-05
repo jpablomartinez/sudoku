@@ -8,7 +8,6 @@ class Sudoku {
   int? maxVisibleValues;
 
   Sudoku.easy() {
-    maxEreaseAction = 5;
     availableHints = 5;
     maxPossibleErrors = 5;
     countdown = 180; //im not sure
@@ -16,7 +15,6 @@ class Sudoku {
   }
 
   Sudoku.medium() {
-    maxEreaseAction = 4;
     availableHints = 3;
     maxPossibleErrors = 5;
     countdown = 180; //im not sure
@@ -24,7 +22,6 @@ class Sudoku {
   }
 
   Sudoku.hard() {
-    maxEreaseAction = 3;
     availableHints = 0;
     maxPossibleErrors = 5;
     countdown = 180; //im not sure

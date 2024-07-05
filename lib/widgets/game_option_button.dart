@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 
 class GameOptionButton extends StatelessWidget {
@@ -40,23 +39,23 @@ class GameOptionButton extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DefaultTextStyle(
-                  style: GoogleFonts.gluten(
+                Text(
+                  title,
+                  style: const TextStyle(
                     color: SudokuColors.firefly,
                     fontSize: 20,
                   ),
-                  child: Text(title),
                 ),
                 SizedBox(
                   width: size.width * 0.70,
-                  child: DefaultTextStyle(
-                    style: GoogleFonts.gluten(
+                  child: Text(
+                    content,
+                    style: const TextStyle(
                       color: SudokuColors.firefly,
                       fontWeight: FontWeight.w300,
                       fontSize: 14,
                       height: 16 / 11,
                     ),
-                    child: Text(content),
                   ),
                 ),
               ],

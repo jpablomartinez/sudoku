@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 
 class UnderlineButton extends StatelessWidget {
@@ -24,12 +23,12 @@ class UnderlineButton extends StatelessWidget {
               children: [
                 Image.asset('assets/images/point.png'),
                 const SizedBox(width: 60),
-                DefaultTextStyle(
-                  style: GoogleFonts.gluten(
+                Text(
+                  label,
+                  style: const TextStyle(
                     color: SudokuColors.congressBlue,
                     fontSize: 26,
                   ),
-                  child: Text(label),
                 ),
               ],
             ),

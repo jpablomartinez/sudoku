@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/widgets/star.dart';
 
@@ -102,7 +101,7 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                 children: [
                   Text(
                     widget.title,
-                    style: GoogleFonts.gluten(
+                    style: TextStyle(
                       color: widget.primaryColor,
                       fontSize: 34,
                       fontWeight: FontWeight.w600,
@@ -118,7 +117,7 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                   const SizedBox(height: 10),
                   Text(
                     'Tiempo usado: ${widget.time}',
-                    style: GoogleFonts.gluten(
+                    style: TextStyle(
                       color: widget.primaryColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w300,
@@ -151,9 +150,9 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                           const SizedBox(
                             height: 4,
                           ),
-                          Text(
+                          const Text(
                             'Menú',
-                            style: GoogleFonts.gluten(
+                            style: TextStyle(
                               color: SudokuColors.congressBlue,
                               fontSize: 16,
                               fontWeight: FontWeight.w300,
@@ -187,9 +186,9 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                           const SizedBox(
                             height: 4,
                           ),
-                          Text(
+                          const Text(
                             'Jugar',
-                            style: GoogleFonts.gluten(
+                            style: TextStyle(
                               color: SudokuColors.congressBlue,
                               fontSize: 16,
                               fontWeight: FontWeight.w300,

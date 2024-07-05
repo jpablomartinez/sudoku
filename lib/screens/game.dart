@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sudoku/classes/sudoku_cell_color.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/controllers/game_controller.dart';
 import 'package:sudoku/utils/difficulty.dart';
+import 'package:sudoku/utils/game_state.dart';
 import 'package:sudoku/utils/time_mode.dart';
 import 'package:sudoku/widgets/action_button.dart';
 import 'package:sudoku/widgets/end_game_dialog.dart';
@@ -31,12 +34,16 @@ class _GameViewState extends State<GameView> {
   Widget stars = const SizedBox();
   Widget board = const SizedBox();
   String timer = '00:00';
+  Widget numberOptions = const SizedBox();
 
-  @override
-  void initState() {
+  void prepareGame() {
     gameController = GameController(widget.difficulty);
     board = createSudokuBoard();
     stars = getStars();
+    numberOptions = createNumberButtons();
+  }
+
+  void startGame() {
     if (widget.timeMode == SudokuTimeMode.timer) {
       gameController.timer.startTimer(const Duration(seconds: 1), () {
         setState(() {
@@ -54,6 +61,12 @@ class _GameViewState extends State<GameView> {
         }
       });
     }
+  }
+
+  @override
+  void initState() {
+    prepareGame();
+    startGame();
     super.initState();
   }
 
@@ -62,11 +75,42 @@ class _GameViewState extends State<GameView> {
     return Size(size.width * percentageWidth, size.height * percentageHeight);
   }
 
-  void erase() {
-    gameController.erase();
+  void pauseGame() {
     setState(() {
-      board = createSudokuBoard();
+      gameController.state = GameState.paused;
     });
+    gameController.pauseGame();
+  }
+
+  void playGame() {
+    setState(() {
+      gameController.state = GameState.play;
+    });
+    startGame();
+  }
+
+  void erase() {
+    if (gameController.isPlaying()) {
+      gameController.erase();
+      setState(() {
+        board = createSudokuBoard();
+      });
+    }
+  }
+
+  void useHint() {
+    if (gameController.isPlaying()) {
+      if (gameController.remainingHintsAction > 0) {
+        gameController.showHint();
+        setState(() {
+          board = createSudokuBoard();
+        });
+      } else {
+        //show alert and (vibrate ?)
+      }
+    } else {
+      //show alert and (vibrate ?)
+    }
   }
 
   void selectSudokuCell(int index) {
@@ -83,23 +127,29 @@ class _GameViewState extends State<GameView> {
   }
 
   void writeNumberOnCell(int value) {
-    gameController.writeNumberOnCell(value);
-    setState(() {
-      board = createSudokuBoard();
-    });
-    if (gameController.gameover()) {
-      gameController.stopGame();
-      openGameOverDialog();
-    } else if (gameController.wonGame()) {
-      openWinDialog();
+    if (gameController.isPlaying()) {
+      gameController.writeNumberOnCell(value);
+      setState(() {
+        board = createSudokuBoard();
+        numberOptions = createNumberButtons();
+      });
+      if (gameController.gameover()) {
+        gameController.stopGame();
+        openGameOverDialog();
+      } else if (gameController.wonGame()) {
+        gameController.stopGame();
+        openWinDialog();
+      }
+      setState(() {
+        stars = getStars();
+      });
+    } else {
+      //show alert
     }
-    setState(() {
-      stars = getStars();
-    });
   }
 
   void closeDialog() {
-    gameController.playGame();
+    playGame();
     Navigator.pop(context);
   }
 
@@ -133,14 +183,15 @@ class _GameViewState extends State<GameView> {
   Widget createNumberButtons() {
     List<Widget> rows = [];
     List<Widget> column = [];
-    for (int i = 1; i <= 9; i++) {
+    for (int i = 0; i < 9; i++) {
       rows.add(
         NumberButton(
-          value: i,
-          onTap: () => writeNumberOnCell(i),
+          value: i + 1,
+          onTap: () => writeNumberOnCell(i + 1),
+          active: gameController.availableNumberButtons[i],
         ),
       );
-      if (i == 5 || i == 9) {
+      if (i == 4 || i == 8) {
         column.add(
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -188,6 +239,25 @@ class _GameViewState extends State<GameView> {
     );
   }
 
+  void endGame() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  void restartGame() {
+    gameController.restart();
+    prepareGame();
+    startGame();
+    Navigator.pop(context);
+  }
+
+  String getUseTime() {
+    if (widget.timeMode == SudokuTimeMode.timer) {
+      return timer;
+    }
+    return gameController.formatTimer(gameController.sudoku.countdown! - gameController.timer.remaining);
+  }
+
   Future<void> openWinDialog() {
     return showDialog(
       context: context,
@@ -195,7 +265,7 @@ class _GameViewState extends State<GameView> {
       builder: (BuildContext context) {
         return EndgameDialog(
           title: '¡HAS GANADO!',
-          time: '01:22',
+          time: getUseTime(),
           imgPath: 'assets/images/blueWin.jpg',
           points: gameController.opportunities,
           primaryColor: SudokuColors.dodgerBlueDarker,
@@ -203,7 +273,7 @@ class _GameViewState extends State<GameView> {
           imgSize: getSizeForDialog(0.74, 0.22),
           dialogSize: getSizeForDialog(0.93, 0.58),
           curve: Curves.easeOutQuint,
-          rightButton: () {},
+          rightButton: () => restartGame(),
           leftButton: () {
             Navigator.pop(context);
             Navigator.pop(context);
@@ -222,18 +292,18 @@ class _GameViewState extends State<GameView> {
         return EndgameDialog(
           curve: Curves.easeOutQuint,
           title: '¡HAS PERDIDO!',
-          time: '01:22',
+          time: getUseTime(),
           imgPath: 'assets/images/red-gameover.jpg',
           points: 0,
           primaryColor: SudokuColors.rose,
           secondaryColor: SudokuColors.roseBud,
           imgSize: getSizeForDialog(0.74, 0.25),
           dialogSize: getSizeForDialog(0.93, 0.58),
+          rightButton: () => restartGame(),
           leftButton: () {
             Navigator.pop(context);
             Navigator.pop(context);
           },
-          rightButton: () {},
           maxPoints: 5, //gameController.sudoku.maxPossibleErrors!,
         );
       },
@@ -241,13 +311,15 @@ class _GameViewState extends State<GameView> {
   }
 
   Future<void> openEndgameDialog() {
-    gameController.timer.pause();
+    if (gameController.state == GameState.play) {
+      pauseGame();
+    }
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return GameAlertDialog(
-          title: 'SUDOKU MENÚ',
+          title: 'SUDOKU',
           content: '¿Deseas salir del juego actual?',
           imgPath: 'assets/images/menu.png',
           widget: Column(
@@ -265,19 +337,19 @@ class _GameViewState extends State<GameView> {
                         border: Border.all(color: SudokuColors.rose),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(
-                        child: DefaultTextStyle(
-                          style: GoogleFonts.gluten(
+                      child: const Center(
+                        child: Text(
+                          'NO',
+                          style: TextStyle(
                             fontSize: 16,
                             color: SudokuColors.rose,
                           ),
-                          child: const Text('NO'),
                         ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () => endGame(),
                     child: Container(
                       height: 40,
                       width: 100,
@@ -285,13 +357,13 @@ class _GameViewState extends State<GameView> {
                         border: Border.all(color: SudokuColors.congressBlue),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(
-                        child: DefaultTextStyle(
-                          style: GoogleFonts.gluten(
+                      child: const Center(
+                        child: Text(
+                          'SI',
+                          style: TextStyle(
                             fontSize: 16,
                             color: SudokuColors.congressBlue,
                           ),
-                          child: const Text('SI'),
                         ),
                       ),
                     ),
@@ -305,6 +377,8 @@ class _GameViewState extends State<GameView> {
       },
     );
   }
+
+  void openSettingsDialog() {}
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +407,7 @@ class _GameViewState extends State<GameView> {
                 width: size.width,
                 child: Column(
                   children: [
-                    const SizedBox(height: 70),
+                    SizedBox(height: size.height * 0.06),
                     Row(
                       children: [
                         RoundedButton(
@@ -342,25 +416,35 @@ class _GameViewState extends State<GameView> {
                             width: 22,
                           ),
                           onTap: () async {
-                            gameController.pauseGame();
-                            await openWinDialog();
+                            await openEndgameDialog();
                           },
                           size: const Size(42, 42),
                         ),
                         const Spacer(),
-                        DefaultTextStyle(
-                          style: GoogleFonts.gluten(color: Colors.white, fontSize: 33),
-                          child: Text(timer),
+                        Text(
+                          timer,
+                          style: const TextStyle(color: Colors.white, fontSize: 33),
                         ),
                         const Spacer(),
                         Row(
                           children: [
                             RoundedButton(
-                              icon: Image.asset(
-                                'assets/icons/pause.png',
-                                width: 12,
-                              ),
-                              onTap: () {},
+                              icon: gameController.state == GameState.play
+                                  ? Image.asset(
+                                      'assets/icons/pause.png',
+                                      width: 12,
+                                    )
+                                  : const FaIcon(
+                                      FontAwesomeIcons.play,
+                                      color: SudokuColors.cerulean,
+                                    ),
+                              onTap: () {
+                                if (gameController.state == GameState.play) {
+                                  pauseGame();
+                                } else if (gameController.state == GameState.paused) {
+                                  playGame();
+                                }
+                              },
                               size: const Size(42, 42),
                             ),
                             RoundedButton(
@@ -375,16 +459,16 @@ class _GameViewState extends State<GameView> {
                         )
                       ],
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        DefaultTextStyle(
-                          style: GoogleFonts.gluten(
+                        Text(
+                          'Dificultad: ${showDifficculty()}',
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.white,
                           ),
-                          child: Text('Dificultad: ${showDifficculty()}'),
                         ),
                         stars,
                       ],
@@ -398,7 +482,6 @@ class _GameViewState extends State<GameView> {
                         ActionButton(
                           backgroundColor: SudokuColors.onahu,
                           icon: Image.asset('assets/icons/erase.png', width: 24),
-                          remainingAction: gameController.remainingEreaseAction,
                           onTap: () => erase(),
                         ),
                         ActionButton(
@@ -409,15 +492,15 @@ class _GameViewState extends State<GameView> {
                         ActionButton(
                           backgroundColor: SudokuColors.onahu,
                           icon: Image.asset('assets/icons/hint.png', width: 25),
-                          remainingAction: 3,
-                          onTap: () {},
+                          remainingAction: gameController.remainingHintsAction,
+                          onTap: () => useHint(),
                         ),
                       ],
                     ),
                     const SizedBox(height: 15),
                     SizedBox(
                       width: size.width,
-                      child: createNumberButtons(),
+                      child: numberOptions,
                     ),
                   ],
                 ),

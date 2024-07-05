@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/classes/sudoku_cell.dart';
 import 'package:sudoku/classes/sudoku_cell_color.dart';
 import 'package:sudoku/colors.dart';
@@ -22,12 +21,12 @@ class SudokuCellWidget extends StatelessWidget {
       List<Widget> annotations = [];
       for (int n in sudokuCell.annotations!) {
         annotations.add(
-          DefaultTextStyle(
-            style: GoogleFonts.gluten(
+          Text(
+            '$n',
+            style: const TextStyle(
               fontSize: 11,
               color: SudokuColors.rose,
             ),
-            child: Text('$n'),
           ),
         );
       }
@@ -38,14 +37,25 @@ class SudokuCellWidget extends StatelessWidget {
     return const SizedBox();
   }
 
+  Color getColor() {
+    if (sudokuCell.hightlight) {
+      return SudokuColors.kGreen;
+    } else if (!sudokuCell.canEreaseValue) {
+      return const Color.fromARGB(255, 1, 20, 43);
+    } else if (sudokuCell.badIndex) {
+      return SudokuColors.rose;
+    }
+    return const Color.fromARGB(255, 40, 114, 216);
+  }
+
   @override
   Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => onTap(),
       child: Container(
-        width: 44,
-        height: 44,
+        width: (size.width - 32) / 9,
+        height: (size.width - 32) / 9,
         padding: const EdgeInsets.symmetric(horizontal: 2),
         decoration: BoxDecoration(
           color: sudokuCell.state == SudokuCellState.normal
@@ -77,14 +87,17 @@ class SudokuCellWidget extends StatelessWidget {
             showAnnotations(),
             Align(
               alignment: Alignment.center,
-              child: DefaultTextStyle(
-                style: GoogleFonts.gluten(
-                  fontSize: 27,
-                  color: SudokuColors.congressBlue,
-                ),
-                child: sudokuCell.value > 0 ? Text('${sudokuCell.value}') : const SizedBox(),
-              ),
-            )
+              child: sudokuCell.value > 0
+                  ? Text(
+                      '${sudokuCell.value}',
+                      style: TextStyle(
+                        fontSize: 27,
+                        color: getColor(),
+                        fontWeight: !sudokuCell.canEreaseValue ? FontWeight.w400 : FontWeight.w500,
+                      ),
+                    )
+                  : const SizedBox(),
+            ),
           ],
         ),
       ),

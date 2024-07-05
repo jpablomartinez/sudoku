@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/screens/game.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/time_mode.dart';
+import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/square_selector_button.dart';
 
 class GameModes extends StatefulWidget {
@@ -40,8 +40,8 @@ class _GameModesState extends State<GameModes> {
             : SudokuDifficulty.hard;
     SudokuTimeMode sudokuTimeMode = timeMode[0] ? SudokuTimeMode.countdown : SudokuTimeMode.timer;
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => GameView(
+      FadeRoute(
+        page: GameView(
           difficulty: sudokuDifficulty,
           timeMode: sudokuTimeMode,
         ),
@@ -64,14 +64,14 @@ class _GameModesState extends State<GameModes> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
-                  const SizedBox(
-                    height: 100,
+                  SizedBox(
+                    height: size.height * 0.05,
                   ),
                   Container(
                     width: size.width,
@@ -96,9 +96,9 @@ class _GameModesState extends State<GameModes> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
+                  const Text(
                     'Modos de juego',
-                    style: GoogleFonts.gluten(
+                    style: TextStyle(
                       color: SudokuColors.dodgerBlueDarker,
                       fontSize: 26,
                       fontWeight: FontWeight.w600,
@@ -115,7 +115,7 @@ class _GameModesState extends State<GameModes> {
                         textColor: SudokuColors.congressBlue,
                         isSelected: difficulty[0],
                         onTap: () => setDifficulty(0),
-                        size: Size(size.width * 0.77, size.height * 0.11),
+                        size: Size(size.width * 0.80, size.height * 0.12),
                       ),
                       SquareSeletorButton(
                         title: 'Intermedio',
@@ -125,7 +125,7 @@ class _GameModesState extends State<GameModes> {
                         textColor: SudokuColors.congressBlue,
                         isSelected: difficulty[1],
                         onTap: () => setDifficulty(1),
-                        size: Size(size.width * 0.77, size.height * 0.11),
+                        size: Size(size.width * 0.80, size.height * 0.12),
                       ),
                       SquareSeletorButton(
                         title: 'Experto',
@@ -135,7 +135,7 @@ class _GameModesState extends State<GameModes> {
                         textColor: SudokuColors.congressBlue,
                         isSelected: difficulty[2],
                         onTap: () => setDifficulty(2),
-                        size: Size(size.width * 0.77, size.height * 0.11),
+                        size: Size(size.width * 0.80, size.height * 0.12),
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -149,7 +149,7 @@ class _GameModesState extends State<GameModes> {
                             textColor: SudokuColors.congressBlue,
                             isSelected: timeMode[0],
                             onTap: () => setTimeMode(0),
-                            size: Size(size.width * 0.36, size.height * 0.15),
+                            size: Size(size.width * 0.38, size.height * 0.17),
                           ),
                           SquareSeletorButton(
                             title: 'Hay tiempo',
@@ -159,7 +159,7 @@ class _GameModesState extends State<GameModes> {
                             textColor: SudokuColors.congressBlue,
                             isSelected: timeMode[1],
                             onTap: () => setTimeMode(1),
-                            size: Size(size.width * 0.36, size.height * 0.15),
+                            size: Size(size.width * 0.38, size.height * 0.17),
                           ),
                         ],
                       ),
@@ -179,9 +179,9 @@ class _GameModesState extends State<GameModes> {
                   ),
                   child: Container(
                     alignment: Alignment.center,
-                    child: Text(
+                    child: const Text(
                       'Comenzar',
-                      style: GoogleFonts.gluten(
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
                       ),

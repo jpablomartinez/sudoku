@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SquareSeletorButton extends StatelessWidget {
   final String title;
@@ -42,12 +41,12 @@ class SquareSeletorButton extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.gluten(color: textColor, fontSize: 18),
+              style: TextStyle(color: textColor, fontSize: 18),
             ),
             const SizedBox(height: 4),
             Text(
               content,
-              style: GoogleFonts.gluten(
+              style: TextStyle(
                 color: textColor,
                 fontSize: 15,
                 fontWeight: FontWeight.w300,

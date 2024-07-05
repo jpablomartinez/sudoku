@@ -6,6 +6,9 @@ class SudokuCell {
   List<int>? annotations;
   SudokuCellState state;
   bool canEreaseValue;
+  bool badIndex;
+  int correctValue;
+  bool hightlight;
 
   SudokuCell(
     this.index,
@@ -13,5 +16,8 @@ class SudokuCell {
     this.value = 0,
     this.annotations,
     this.canEreaseValue = true,
+    this.badIndex = false,
+    this.correctValue = 0,
+    this.hightlight = false,
   });
 }

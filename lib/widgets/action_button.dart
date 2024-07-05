@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/colors.dart';
 
 class ActionButton extends StatelessWidget {
@@ -50,12 +49,12 @@ class ActionButton extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: DefaultTextStyle(
-                          style: GoogleFonts.averiaGruesaLibre(
+                        child: Text(
+                          '$remainingAction',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                           ),
-                          child: Text('$remainingAction'),
                         ),
                       ),
                     ),

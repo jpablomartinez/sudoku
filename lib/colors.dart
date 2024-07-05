@@ -15,4 +15,7 @@ class SudokuColors {
   static const Color freshAir = Color(0xffB1D5FF);
   static const Color malibuDarker = Color(0xff6BAFFF);
   static const Color roseBud = Color(0xffFCAEAE);
+  static const Color kGreen = Color.fromARGB(255, 47, 158, 99);
+  static const Color disabledCell = Color(0xffEFF6FF);
+  static const Color disabledNumber = Color(0xff7A8CA3);
 }

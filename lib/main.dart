@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sudoku/screens/game.dart';
-import 'package:sudoku/screens/game_modes.dart';
 import 'package:sudoku/screens/title.dart';
 
 void main() {
@@ -19,6 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        fontFamily: 'Gluten',
       ),
       home: const TitleScreen(),
     );
