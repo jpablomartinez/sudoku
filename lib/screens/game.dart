@@ -1,7 +1,6 @@
 import 'dart:async';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/classes/sudoku_cell_color.dart';
 import 'package:sudoku/colors.dart';
@@ -14,6 +13,8 @@ import 'package:sudoku/widgets/end_game_dialog.dart';
 import 'package:sudoku/widgets/game_alert_dialog.dart';
 import 'package:sudoku/widgets/number_button.dart';
 import 'package:sudoku/widgets/rounded_button.dart';
+import 'package:sudoku/widgets/setting_option_dialog.dart';
+import 'package:sudoku/widgets/settings_dialog.dart';
 import 'package:sudoku/widgets/star.dart';
 import 'package:sudoku/widgets/sudoku_cell_widget.dart';
 
@@ -167,14 +168,16 @@ class _GameViewState extends State<GameView> {
       for (int j = 0; j < 9; j++) {
         row.add(
           SudokuCellWidget(
-              sudokuCell: gameController.sudokuCells[9 * i + j],
-              sudokuCellColor: SudokuCellColor(
-                SudokuColors.onahu,
-                SudokuColors.cerulean,
-                SudokuColors.freshAir,
-                SudokuColors.malibuDarker,
-              ),
-              onTap: () => selectSudokuCell(9 * i + j)),
+            sudokuCell: gameController.sudokuCells[9 * i + j],
+            sudokuCellColor: SudokuCellColor(
+              SudokuColors.onahu,
+              SudokuColors.cerulean,
+              SudokuColors.freshAir,
+              SudokuColors.malibuDarker,
+            ),
+            showGuideLine: widget.settingsManager.getVisualGuide(),
+            onTap: () => selectSudokuCell(9 * i + j),
+          ),
         );
       }
       column.add(Row(
@@ -230,12 +233,12 @@ class _GameViewState extends State<GameView> {
       if (i > gameController.opportunities) {
         stars.add(const StarWidget(
           isFull: false,
-          height: 20,
+          height: 18,
         ));
       } else {
         stars.add(const StarWidget(
           isFull: true,
-          height: 20,
+          height: 18,
         ));
       }
     }
@@ -384,7 +387,129 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  void openSettingsDialog() {}
+  Future<void> openSettingsDialog(Size size) {
+    if (gameController.state == GameState.play) {
+      pauseGame();
+    }
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return SettingsDialog(
+              widget: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      SettingOptionDialog(
+                        iconPath: 'assets/icons/audio.png',
+                        title: 'Sonido',
+                        width: size.width * 0.85 - 195,
+                        onChanged: (double value) {
+                          setState(() {
+                            widget.settingsManager.getAudioSettingsManager().setAudioVolume(value.toInt());
+                          });
+                        },
+                        value: widget.settingsManager.getAudioSettingsManager().getAudioVolume().toDouble(),
+                      ),
+                      SettingOptionDialog(
+                        iconPath: 'assets/icons/music.png',
+                        title: 'Música',
+                        width: size.width * 0.85 - 195,
+                        onChanged: (double value) {
+                          setState(() {
+                            widget.settingsManager.getAudioSettingsManager().setBackgroundVolume(value.toInt());
+                          });
+                        },
+                        value: widget.settingsManager.getAudioSettingsManager().getBackgroundVolume().toDouble(),
+                      ),
+                      SettingOptionDialog(
+                        iconPath: 'assets/icons/audio.png',
+                        title: 'Guía visual',
+                        width: size.width * 0.85 * 0.21,
+                        onChanged: (double value) {
+                          setState(() {
+                            widget.settingsManager.setVisualGuide(value == 2);
+                          });
+                        },
+                        min: 1,
+                        max: 2,
+                        divisions: 1,
+                        value: widget.settingsManager.getVisualGuide() ? 2 : 1,
+                      ),
+                      SettingOptionDialog(
+                        iconPath: 'assets/icons/music.png',
+                        title: 'Vibrar',
+                        onChanged: (double value) {
+                          setState(() {
+                            widget.settingsManager.setCanVibrate(value == 2);
+                          });
+                        },
+                        min: 1,
+                        max: 2,
+                        divisions: 1,
+                        width: size.width * 0.85 * 0.21,
+                        value: widget.settingsManager.getCanVibrate() ? 2 : 1,
+                      ),
+                      SettingOptionDialog(
+                        iconPath: 'assets/icons/audio.png',
+                        title: 'Guardar',
+                        onChanged: (double value) {
+                          setState(() {
+                            widget.settingsManager.setSaveOnExit(value == 2);
+                          });
+                        },
+                        min: 1,
+                        max: 2,
+                        divisions: 1,
+                        width: size.width * 0.85 * 0.21,
+                        value: widget.settingsManager.getSaveOnExit() ? 2 : 1,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              backButton: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: 155,
+                  height: 48,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: SudokuColors.dodgerBlueDarker,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/icons/arrow2.png',
+                        height: 12,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Volver',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              curve: Curves.easeOutQuint,
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -402,7 +527,7 @@ class _GameViewState extends State<GameView> {
           children: [
             Container(
               height: size.height * 0.4,
-              color: SudokuColors.dodgerBlue.withOpacity(0.82),
+              color: SudokuColors.dodgerBlue.withOpacity(0.90),
             ),
             Positioned(
               top: 0,
@@ -441,9 +566,13 @@ class _GameViewState extends State<GameView> {
                                       width: 12,
                                       color: SudokuColors.cerulean,
                                     )
-                                  : const FaIcon(
-                                      FontAwesomeIcons.play,
-                                      color: SudokuColors.cerulean,
+                                  : Transform.rotate(
+                                      angle: math.pi,
+                                      child: Image.asset(
+                                        'assets/icons/play2.png',
+                                        height: 18,
+                                        color: SudokuColors.cerulean,
+                                      ),
                                     ),
                               onTap: () {
                                 if (gameController.state == GameState.play) {
@@ -460,7 +589,7 @@ class _GameViewState extends State<GameView> {
                                 color: SudokuColors.cerulean,
                                 width: 22,
                               ),
-                              onTap: () {},
+                              onTap: () => openSettingsDialog(size),
                               size: const Size(42, 42),
                             ),
                           ],

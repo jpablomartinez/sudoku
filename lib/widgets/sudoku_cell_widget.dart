@@ -8,12 +8,14 @@ class SudokuCellWidget extends StatelessWidget {
   final SudokuCell sudokuCell;
   final SudokuCellColor sudokuCellColor;
   final Function onTap;
+  final bool showGuideLine;
 
   const SudokuCellWidget({
     super.key,
     required this.sudokuCell,
     required this.sudokuCellColor,
     required this.onTap,
+    required this.showGuideLine,
   });
 
   Widget showAnnotations() {
@@ -62,7 +64,9 @@ class SudokuCellWidget extends StatelessWidget {
               ? sudokuCellColor.backgroundColor
               : sudokuCell.state == SudokuCellState.selected
                   ? sudokuCellColor.selectedColor
-                  : sudokuCellColor.highlightColor,
+                  : showGuideLine
+                      ? sudokuCellColor.highlightColor
+                      : sudokuCellColor.backgroundColor,
           border: Border(
             left: BorderSide(
               color: sudokuCellColor.borderColor,

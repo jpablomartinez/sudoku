@@ -2,8 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:sudoku/classes/interfaces/iaudio.dart';
 
 class AudioSettingsManager implements IAudioSettingsManager {
-  int _backroundVolume = 0;
-  int _audioVolume = 0;
+  int _backroundVolume = 50;
+  int _audioVolume = 50;
   AudioPlayer soundsPlayer = AudioPlayer();
   AudioPlayer backgroundMusic = AudioPlayer();
 

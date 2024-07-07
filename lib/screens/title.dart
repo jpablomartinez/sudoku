@@ -74,6 +74,7 @@ class _TitleScreenState extends State<TitleScreen> {
                         width: 3,
                       ),*/
                       borderRadius: BorderRadius.circular(10),
+
                       /*boxShadow: const [
                         BoxShadow(
                           color: SudokuColors.dodgerBlueDarker,
@@ -149,8 +150,8 @@ class _TitleScreenState extends State<TitleScreen> {
                 child: const Text(
                   'JK STUDIOS - versión 0.4.1',
                   style: TextStyle(
-                    fontSize: 14,
-                    color: SudokuColors.dodgerBlueDarker,
+                    fontSize: 12,
+                    color: SudokuColors.congressBlue,
                   ),
                 ),
               )

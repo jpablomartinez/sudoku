@@ -26,12 +26,19 @@ class ActionButton extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
-              width: 56,
-              height: 56,
+              width: 60,
+              height: 60,
               margin: const EdgeInsets.symmetric(horizontal: 3),
               decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: SudokuColors.onahu.withOpacity(0.8),
+                    offset: const Offset(0, 4),
+                    blurRadius: 4,
+                  ),
+                ],
               ),
               child: Center(
                 child: icon,

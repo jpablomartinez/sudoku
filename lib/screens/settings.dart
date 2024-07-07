@@ -58,32 +58,30 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                 ),
               ),
               const SizedBox(height: 20),
-              ClipRRect(
-                child: Container(
-                  width: size.width * 0.61,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: SudokuColors.onahu,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: const Color(0xff9FC6F3),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: SudokuColors.onahu.withOpacity(0.8),
-                        offset: const Offset(0, 4),
-                        blurRadius: 2,
-                      ),
-                    ],
+              Container(
+                width: size.width * 0.61,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: SudokuColors.onahu,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: const Color(0xff9FC6F3),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'Ajustes',
-                      style: TextStyle(
-                        color: SudokuColors.dodgerBlueDarker,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: SudokuColors.onahu.withOpacity(0.8),
+                      offset: const Offset(0, 4),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Text(
+                    'Ajustes',
+                    style: TextStyle(
+                      color: SudokuColors.dodgerBlueDarker,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

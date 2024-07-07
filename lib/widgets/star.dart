@@ -13,8 +13,9 @@ class StarWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
       child: Image.asset(
-        isFull ? 'assets/icons/full-star.png' : 'assets/icons/empty-star.png',
+        'assets/icons/star2.png',
         height: height,
+        color: isFull ? Color.fromARGB(255, 221, 218, 46) : const Color(0xff074793),
       ),
     );
   }
