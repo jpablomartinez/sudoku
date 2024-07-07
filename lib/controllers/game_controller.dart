@@ -147,7 +147,7 @@ class GameController {
     return sudokuCells.where((s) => s.value == value).toList().length < 9;
   }
 
-  void writeNumberOnCell(int value) {
+  void writeNumberOnCell(int value, bool canVibrate) {
     if (sudokuCells[selectedCell].value == 0) {
       if (writeAnnotation) {
         if (sudokuCells[selectedCell].annotations!.length < 4 && !sudokuCells[selectedCell].annotations!.contains(value)) {

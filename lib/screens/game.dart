@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/classes/sudoku_cell_color.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/controllers/game_controller.dart';
@@ -19,10 +20,12 @@ import 'package:sudoku/widgets/sudoku_cell_widget.dart';
 class GameView extends StatefulWidget {
   final SudokuDifficulty difficulty;
   final SudokuTimeMode timeMode;
+  final SettingsManager settingsManager;
   const GameView({
     super.key,
     required this.difficulty,
     required this.timeMode,
+    required this.settingsManager,
   });
 
   @override
@@ -90,6 +93,7 @@ class _GameViewState extends State<GameView> {
   }
 
   void erase() {
+    widget.settingsManager.getAudioSettingsManager().playEraseAudio();
     if (gameController.isPlaying()) {
       gameController.erase();
       setState(() {
@@ -99,6 +103,7 @@ class _GameViewState extends State<GameView> {
   }
 
   void useHint() {
+    widget.settingsManager.getAudioSettingsManager().playHintAudio();
     if (gameController.isPlaying()) {
       if (gameController.remainingHintsAction > 0) {
         gameController.showHint();
@@ -127,8 +132,9 @@ class _GameViewState extends State<GameView> {
   }
 
   void writeNumberOnCell(int value) {
+    widget.settingsManager.getAudioSettingsManager().playWriteNumberAudio();
     if (gameController.isPlaying()) {
-      gameController.writeNumberOnCell(value);
+      gameController.writeNumberOnCell(value, widget.settingsManager.getCanVibrate());
       setState(() {
         board = createSudokuBoard();
         numberOptions = createNumberButtons();
@@ -431,8 +437,9 @@ class _GameViewState extends State<GameView> {
                             RoundedButton(
                               icon: gameController.state == GameState.play
                                   ? Image.asset(
-                                      'assets/icons/pause.png',
+                                      'assets/icons/pause2.png',
                                       width: 12,
+                                      color: SudokuColors.cerulean,
                                     )
                                   : const FaIcon(
                                       FontAwesomeIcons.play,
@@ -449,7 +456,8 @@ class _GameViewState extends State<GameView> {
                             ),
                             RoundedButton(
                               icon: Image.asset(
-                                'assets/icons/settings.png',
+                                'assets/icons/settings2.png',
+                                color: SudokuColors.cerulean,
                                 width: 22,
                               ),
                               onTap: () {},

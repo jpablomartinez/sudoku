@@ -1,7 +1,10 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:sudoku/classes/audio_settings_manager.dart';
+import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/colors.dart';
-import 'package:sudoku/controllers/audio_controller.dart';
 import 'package:sudoku/screens/game_modes.dart';
+import 'package:sudoku/screens/settings.dart';
 import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/square_button.dart';
 
@@ -13,11 +16,14 @@ class TitleScreen extends StatefulWidget {
 }
 
 class _TitleScreenState extends State<TitleScreen> {
-  late AudioController audioController;
+  late AudioSettingsManager audioSettingsManager;
+  late SettingsManager settingsManager;
 
   @override
   void initState() {
-    audioController = AudioController();
+    audioSettingsManager = AudioSettingsManager();
+    settingsManager = SettingsManager();
+    settingsManager.setAudioSettingsManager(audioSettingsManager);
     super.initState();
   }
 
@@ -79,29 +85,37 @@ class _TitleScreenState extends State<TitleScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SquareButton(
-                            backgroundColor: SudokuColors.dodgerBlueDarker,
-                            borderColor: SudokuColors.dodgerBlueDarker,
-                            labelColor: Colors.white,
-                            label: 'Jugar',
-                            icon: const Icon(
-                              Icons.play_arrow_rounded,
-                              color: Colors.white,
-                              size: 33,
+                          backgroundColor: SudokuColors.dodgerBlueDarker,
+                          borderColor: SudokuColors.dodgerBlueDarker,
+                          labelColor: Colors.white,
+                          label: 'Jugar',
+                          icon: Transform.rotate(
+                            angle: math.pi,
+                            child: Image.asset(
+                              'assets/icons/play2.png',
+                              height: 18,
+                              color: SudokuColors.dodgerBlueDarker,
                             ),
-                            onTap: () {
-                              //audioController.playSelectAudio();
-                              Navigator.of(context).push(
-                                FadeRoute(page: const GameModes()),
-                              );
-                            }),
+                          ),
+                          onTap: () {
+                            settingsManager.getAudioSettingsManager().playSelectAudio();
+                            Navigator.of(context).push(
+                              FadeRoute(
+                                page: GameModes(
+                                  settingsManager: settingsManager,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                         SquareButton(
                           backgroundColor: Colors.white,
                           borderColor: SudokuColors.dodgerBlueDarker,
                           labelColor: SudokuColors.dodgerBlueDarker,
                           label: 'Registros',
                           icon: Image.asset(
-                            'assets/icons/game-icon.png',
-                            height: 15,
+                            'assets/icons/gamepad.png',
+                            height: 18,
                             color: SudokuColors.dodgerBlueDarker,
                           ),
                           onTap: () {},
@@ -112,11 +126,16 @@ class _TitleScreenState extends State<TitleScreen> {
                           labelColor: SudokuColors.dodgerBlueDarker,
                           label: 'Ajustes',
                           icon: Image.asset(
-                            'assets/icons/settings.png',
-                            height: 20,
+                            'assets/icons/settings2.png',
+                            height: 22,
                             color: SudokuColors.dodgerBlueDarker,
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            settingsManager.getAudioSettingsManager().playSelectAudio();
+                            Navigator.of(context).push(
+                              FadeRoute(page: SettingsManagerView(settingsManager: settingsManager)),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -128,7 +147,7 @@ class _TitleScreenState extends State<TitleScreen> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: const Text(
-                  'JK STUDIOS - versión 0.3',
+                  'JK STUDIOS - versión 0.4.1',
                   style: TextStyle(
                     fontSize: 14,
                     color: SudokuColors.dodgerBlueDarker,

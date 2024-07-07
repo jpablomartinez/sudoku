@@ -6,20 +6,26 @@ class AudioController {
 
   late AudioPlayer soundsPlayer;
   late AudioPlayer backgroundMusic;
-  int soundVolume = 1;
-  int backgroundMusicVolume = 1;
 
   AudioController() {
     soundsPlayer = AudioPlayer();
     backgroundMusic = AudioPlayer();
   }
 
+  void setVolumeSoundPlayer(int v) {
+    soundsPlayer.setVolume(v.toDouble());
+  }
+
+  void setVolumeBackgroundPlayer(int v) {
+    backgroundMusic.setVolume(v.toDouble());
+  }
+
   Future<void> playSelectAudio() async {
-    await soundsPlayer.play(AssetSource('audio/select.wav'));
+    await soundsPlayer.play(AssetSource('audio/write_number.wav'));
   }
 
   Future<void> playWinAudio() async {
-    await soundsPlayer.play(AssetSource('audio/select.wav'));
+    //await soundsPlayer.play(AssetSource('audio/select.wav'));
   }
 
   void playBackgroundLoopAudio() {}
@@ -28,7 +34,15 @@ class AudioController {
 
   void playMainBackgroundAudio() {}
 
+  Future<void> playEraseAudio() async {
+    await soundsPlayer.play(AssetSource('audio/erase.wav'));
+  }
+
+  Future<void> playHintAudio() async {
+    await soundsPlayer.play(AssetSource('audio/hint.wav'));
+  }
+
   Future<void> playGameModeBackgroundAudio() async {
-    await backgroundMusic.play(AssetSource('audio/game_mode.wav'));
+    //await backgroundMusic.play(AssetSource('audio/game_mode.wav'));
   }
 }

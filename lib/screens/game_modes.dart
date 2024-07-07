@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/screens/game.dart';
 import 'package:sudoku/utils/difficulty.dart';
@@ -8,7 +8,11 @@ import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/square_selector_button.dart';
 
 class GameModes extends StatefulWidget {
-  const GameModes({super.key});
+  final SettingsManager settingsManager;
+  const GameModes({
+    super.key,
+    required this.settingsManager,
+  });
 
   @override
   State<GameModes> createState() => _GameModesState();
@@ -44,6 +48,7 @@ class _GameModesState extends State<GameModes> {
         page: GameView(
           difficulty: sudokuDifficulty,
           timeMode: sudokuTimeMode,
+          settingsManager: widget.settingsManager,
         ),
       ),
     );
@@ -85,11 +90,19 @@ class _GameModesState extends State<GameModes> {
                         decoration: BoxDecoration(
                           color: SudokuColors.onahu,
                           borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: SudokuColors.onahu.withOpacity(0.8),
+                              offset: const Offset(0, 4),
+                              blurRadius: 4,
+                            ),
+                          ],
                         ),
-                        child: const Center(
-                          child: FaIcon(
-                            FontAwesomeIcons.arrowLeft,
-                            color: SudokuColors.dodgerBlueDarker,
+                        child: Center(
+                          child: Image.asset(
+                            'assets/icons/arrow2.png',
+                            height: 17,
+                            color: const Color(0xff3B95FF),
                           ),
                         ),
                       ),
