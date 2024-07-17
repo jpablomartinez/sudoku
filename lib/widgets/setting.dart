@@ -23,7 +23,7 @@ class Setting extends StatelessWidget {
     return Container(
       width: size.width * 0.85,
       height: size.height * 0.11,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: SudokuColors.onahu.withOpacity(0.7),
@@ -75,7 +75,7 @@ class Setting extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    width: 92,
+                    width: 89,
                     child: Text(
                       title,
                       style: const TextStyle(

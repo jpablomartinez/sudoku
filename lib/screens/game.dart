@@ -39,6 +39,8 @@ class _GameViewState extends State<GameView> {
   Widget board = const SizedBox();
   String timer = '00:00';
   Widget numberOptions = const SizedBox();
+  String winMessage = '';
+  Color winDialogColor = const Color(0xff65E8A1);
 
   void prepareGame() {
     gameController = GameController(widget.difficulty);
@@ -59,7 +61,7 @@ class _GameViewState extends State<GameView> {
         setState(() {
           timer = gameController.formatTimer(gameController.timer.remaining);
         });
-        if (gameController.timer.remaining == 0) {
+        if (gameController.timer.remaining == 0 || gameController.timer.time >= maxGameTime) {
           gameController.stopGame();
           openGameOverDialog();
         }
@@ -145,6 +147,7 @@ class _GameViewState extends State<GameView> {
         openGameOverDialog();
       } else if (gameController.wonGame()) {
         gameController.stopGame();
+        winMessage = gameController.opportunities == 5 ? 'Impecable' : 'Sigue mejorando';
         openWinDialog();
       }
       setState(() {
@@ -273,14 +276,17 @@ class _GameViewState extends State<GameView> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return EndgameDialog(
-          title: '¡HAS GANADO!',
+          title: '¡Ganaste!',
           time: getUseTime(),
-          imgPath: 'assets/images/blueWin.jpg',
           points: gameController.opportunities,
           primaryColor: SudokuColors.dodgerBlueDarker,
           secondaryColor: SudokuColors.onahu,
-          imgSize: getSizeForDialog(0.74, 0.22),
-          dialogSize: getSizeForDialog(0.93, 0.58),
+          leftButtonColor: const Color(0xff3B95FF),
+          rightButtonColor: const Color(0xffB7D8FF),
+          titleColor: const Color(0xff30DC7F),
+          decorator: winDialogColor,
+          message: winMessage,
+          dialogSize: getSizeForDialog(0.93, 0.44),
           curve: Curves.easeOutQuint,
           rightButton: () => restartGame(),
           leftButton: () {
@@ -300,14 +306,15 @@ class _GameViewState extends State<GameView> {
       builder: (BuildContext context) {
         return EndgameDialog(
           curve: Curves.easeOutQuint,
-          title: '¡HAS PERDIDO!',
+          title: '¡Perdiste!',
           time: getUseTime(),
-          imgPath: 'assets/images/red-gameover.jpg',
           points: 0,
-          primaryColor: SudokuColors.rose,
+          primaryColor: SudokuColors.dodgerBlueDarker,
           secondaryColor: SudokuColors.roseBud,
-          imgSize: getSizeForDialog(0.74, 0.25),
-          dialogSize: getSizeForDialog(0.93, 0.58),
+          leftButtonColor: const Color(0xffB7D8FF),
+          rightButtonColor: const Color(0xff3B95FF),
+          titleColor: const Color(0xffFA604B),
+          dialogSize: getSizeForDialog(0.93, 0.44),
           rightButton: () => restartGame(),
           leftButton: () {
             Navigator.pop(context);
@@ -328,60 +335,61 @@ class _GameViewState extends State<GameView> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return GameAlertDialog(
-          title: 'SUDOKU',
-          content: '¿Deseas salir del juego actual?',
-          imgPath: 'assets/images/menu.png',
-          widget: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          title: '¿Seguro que quieres salir?',
+          content: '¡Perderás todas las jugadas de esta partida!',
+          curve: Curves.easeOutQuint,
+          leftButton: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () => closeDialog(),
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: SudokuColors.rose),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'NO',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: SudokuColors.rose,
-                          ),
-                        ),
-                      ),
-                    ),
+              Image.asset(
+                'assets/icons/home.png',
+                height: 18,
+                color: const Color(0xff012F64),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                alignment: Alignment.bottomCenter,
+                child: const Text(
+                  'Salir',
+                  style: TextStyle(
+                    color: Color(0xff012F64),
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16,
                   ),
-                  GestureDetector(
-                    onTap: () => endGame(),
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: SudokuColors.congressBlue),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'SI',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: SudokuColors.congressBlue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               )
             ],
           ),
-          curve: Curves.easeOutQuint,
+          leftAction: () => endGame(),
+          rightButton: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/icons/gamepad.png',
+                height: 18,
+                color: Colors.white,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                alignment: Alignment.bottomCenter,
+                child: const Text(
+                  'Continuar',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16,
+                  ),
+                ),
+              )
+            ],
+          ),
+          rightAction: () => closeDialog(),
         );
       },
     );
@@ -473,33 +481,32 @@ class _GameViewState extends State<GameView> {
               ),
               backButton: GestureDetector(
                 onTap: () {
+                  playGame();
                   Navigator.pop(context);
                 },
                 child: Container(
-                  width: 155,
-                  height: 48,
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  height: 33,
+                  width: 33,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: SudokuColors.dodgerBlueDarker,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/icons/arrow2.png',
-                        height: 12,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Volver',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+                    color: const Color(0xffFA604B),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xffFA604B).withOpacity(0.25),
+                        offset: const Offset(0, 4),
+                        blurRadius: 4,
                       ),
                     ],
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'X',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 21,
+                      ),
+                    ),
                   ),
                 ),
               ),

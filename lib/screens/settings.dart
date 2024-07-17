@@ -94,7 +94,7 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                 actualValue: '${widget.settingsManager.getAudioSettingsManager().getAudioVolume()}',
                 slider: SizedBox(
                   height: 25,
-                  width: size.width * 0.85 * 0.4,
+                  width: size.width * 0.85 * 0.40,
                   child: SliderTheme(
                     data: SliderTheme.of(context).copyWith(
                       trackHeight: 10, // Set the height of the track
@@ -237,7 +237,7 @@ class _SettingsManagerState extends State<SettingsManagerView> {
             child: Container(
               alignment: Alignment.center,
               child: const Text(
-                'JK STUDIOS - Version 0.4.1',
+                'JK STUDIOS - Version 0.4.3',
                 style: TextStyle(
                   color: SudokuColors.congressBlue,
                   fontSize: 12,

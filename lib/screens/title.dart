@@ -4,6 +4,7 @@ import 'package:sudoku/classes/audio_settings_manager.dart';
 import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/screens/game_modes.dart';
+import 'package:sudoku/screens/records.dart';
 import 'package:sudoku/screens/settings.dart';
 import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/square_button.dart';
@@ -119,7 +120,12 @@ class _TitleScreenState extends State<TitleScreen> {
                             height: 18,
                             color: SudokuColors.dodgerBlueDarker,
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            settingsManager.getAudioSettingsManager().playSelectAudio();
+                            Navigator.of(context).push(
+                              FadeRoute(page: const RecordsView()),
+                            );
+                          },
                         ),
                         SquareButton(
                           backgroundColor: Colors.white,
@@ -148,7 +154,7 @@ class _TitleScreenState extends State<TitleScreen> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: const Text(
-                  'JK STUDIOS - versión 0.4.1',
+                  'JK STUDIOS - versión 0.4.3',
                   style: TextStyle(
                     fontSize: 12,
                     color: SudokuColors.congressBlue,

@@ -95,7 +95,7 @@ class GameController {
   void selectSudokuCell(int index) {
     clearSelection();
     if (configuration.showGuideline!) {
-      for (int i = index; i > 0; i -= 9) {
+      for (int i = index; i > -1; i -= 9) {
         sudokuCells[i].state = SudokuCellState.hightlight;
       }
       for (int i = index; i < 81; i += 9) {
@@ -157,10 +157,12 @@ class GameController {
         sudokuCells[selectedCell].value = value;
         sudokuCells[selectedCell].annotations = [];
       }
-      bool isWrong = checkWrongNumber(value);
+      bool isWrong = writeAnnotation ? false : checkWrongNumber(value);
       if (isWrong) {
         opportunities--;
-        vibrate();
+        if (canVibrate) {
+          vibrate();
+        }
         if (opportunities == 0) {
           state = GameState.gameover;
         }
@@ -217,8 +219,6 @@ class GameController {
   }
 
   bool valueIsCorrect(int value) {
-    print('VALUE: $value');
-    print('ORIGINAL: ${sudokuCells[selectedCell].correctValue}');
     return value != sudokuCells[selectedCell].correctValue;
   }
 

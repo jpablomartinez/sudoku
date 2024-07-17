@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/colors.dart';
+import 'dart:math' as math;
+
+import 'package:sudoku/widgets/triangle_clipper.dart';
 
 class SettingsDialog extends StatefulWidget {
   final Widget widget;
@@ -40,7 +43,7 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
 
   Size getSizeOrientationMobile(Size s) {
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      return Size(s.width * 0.9, s.height * 0.55);
+      return Size(s.width * 0.9, s.height * 0.50);
     } else {
       return Size(360, s.height * 0.75);
     }
@@ -49,35 +52,73 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     Size sizeOrientation = getSizeOrientationMobile(size);
-
     return Center(
       child: Material(
         color: Colors.transparent,
         child: ScaleTransition(
           scale: animation,
           child: Container(
-            height: sizeOrientation.height,
+            height: sizeOrientation.height * 0.82,
             width: sizeOrientation.width,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            //padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
+            child: SizedBox(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text(
-                    'Ajustes',
-                    style: TextStyle(fontSize: 22, color: SudokuColors.dodgerBlueDarker),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        left: sizeOrientation.width / 2 - 10,
+                        bottom: -20,
+                        child: ClipPath(
+                          clipper: TriangleClipper(),
+                          child: Container(
+                            height: 20,
+                            width: 20,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff4B9CFA).withOpacity(0.7),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        width: sizeOrientation.width,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff4B9CFA).withOpacity(0.7),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(width: 1),
+                            const Text(
+                              'Ajustes',
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Color(0xff104D96),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            widget.backButton,
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: sizeOrientation.height * 0.65,
+                    height: sizeOrientation.height * 0.82 - 52,
                     width: sizeOrientation.width,
                     child: Container(
                       decoration: BoxDecoration(
@@ -92,7 +133,7 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
                           Container(
                             alignment: Alignment.center,
                             child: const Text(
-                              'JK STUDIOS - Version 0.4.1',
+                              'JK STUDIOS - Version 0.4.3',
                               style: TextStyle(
                                 color: SudokuColors.congressBlue,
                                 fontSize: 12,
@@ -103,7 +144,6 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
                       ),
                     ),
                   ),
-                  widget.backButton,
                 ],
               ),
             ),
