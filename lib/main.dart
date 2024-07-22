@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/controllers/database_controller.dart';
 import 'package:sudoku/screens/title.dart';
 
-void main() {
-  runApp(const MyApp());
+late ObjectBox objectBox;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  objectBox = await ObjectBox.init();
+  print('box ready');
+  runApp(const SudokuGameView());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SudokuGameView extends StatelessWidget {
+  const SudokuGameView({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sudoku',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         fontFamily: 'Gluten',
       ),

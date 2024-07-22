@@ -8,6 +8,7 @@ class SquareButton extends StatelessWidget {
   final Color labelColor;
   final Function onTap;
   final Widget icon;
+  final bool withBackground;
 
   const SquareButton({
     super.key,
@@ -17,6 +18,7 @@ class SquareButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.icon = const SizedBox(),
+    this.withBackground = false,
   });
 
   @override
@@ -58,7 +60,7 @@ class SquareButton extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: SudokuColors.onahu,
+                color: withBackground ? SudokuColors.onahu : Colors.white,
               ),
               child: icon,
             ),

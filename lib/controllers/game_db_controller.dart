@@ -1,36 +1,32 @@
-import 'package:objectbox/objectbox.dart';
 import 'package:sudoku/classes/stat.dart';
 import 'package:sudoku/database/model.dart';
 import 'package:sudoku/objectbox.g.dart';
+import 'package:sudoku/utils/game_state.dart';
 
 class GameDBController {
   late final Box<SudokuStat> stats;
 
-  List<SudokuStat> findAllByLevel(String level) {
-    List<SudokuStat> all = stats.getAll();
-    return all.where((s) => s.level == level).toList();
+  List<Stat> getResultsByLevel() {
+    const levels = ['easy', 'medium', 'hard'];
+    List<Stat> statsResults = [];
+    for (var level in levels) {
+      Query<SudokuStat> queryWin = stats.query(SudokuStat_.level.equals(level).and(SudokuStat_.result.equals(winGame))).order(SudokuStat_.time, flags: Order.descending).build();
+      Query<SudokuStat> queryMatches = stats.query(SudokuStat_.level.equals(level)).build();
+      List<SudokuStat> matches = queryMatches.find();
+      List<SudokuStat> wins = queryWin.find();
+      statsResults.add(
+        Stat(
+          matches: matches.length,
+          win: wins.length,
+          gameOver: matches.length - wins.length,
+          time: matches.isNotEmpty ? wins.last.time : 0,
+        ),
+      );
+    }
+    return statsResults;
   }
 
-  Stat findResultsByLevel(String level) {
-    /*
-    QueryBuilder<Location> qb = locationBox.query(Location_.locationKey.equals(locationKey));
-    Query q = qb.build();
-    Location? location = q.findUnique();
-    q.close();
-    return location!;
-    */
-    Query<SudokuStat> queryWin = stats.query(SudokuStat_.level.equals(level).and(SudokuStat_.result.equals(1))).build();
-    Query<SudokuStat> queryMatches = stats.query(SudokuStat_.level.equals(level).and(SudokuStat_.result.equals(0))).order(SudokuStat_.time, flags: Order.descending).build();
-    List<SudokuStat> matches = queryMatches.find();
-    int win = queryWin.find().length;
-    int gameOver = matches.length - win;
-    int betterTime = matches.last.time;
-
-    return Stat(
-      matches: matches.length,
-      win: win,
-      gameOver: gameOver,
-      time: betterTime,
-    );
+  void saveResult(SudokuStat stat) {
+    stats.put(stat);
   }
 }

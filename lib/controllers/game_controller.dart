@@ -4,6 +4,8 @@ import 'package:sudoku/classes/countdown.dart';
 import 'package:sudoku/classes/sudoku.dart';
 import 'package:sudoku/classes/sudoku_cell.dart';
 import 'package:sudoku/controllers/sudoku_generator.dart';
+import 'package:sudoku/database/model.dart';
+import 'package:sudoku/main.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/game_state.dart';
 import 'package:sudoku/utils/states.dart';
@@ -62,7 +64,7 @@ class GameController {
       }
       if (show && countVisibleValues <= sudoku.maxVisibleValues!) {
         fixValueOnBoard(i);
-        countVisibleValues++;
+        //countVisibleValues++;
       }
       sudokuCells[i].correctValue = sudokuGenerator.sudokuCells[i];
     }
@@ -135,11 +137,13 @@ class GameController {
   }
 
   void showHint() {
-    if (sudokuCells[selectedCell].value == 0) {
-      sudokuCells[selectedCell].value = sudokuCells[selectedCell].correctValue;
-      sudokuCells[selectedCell].canEreaseValue = false;
-      sudokuCells[selectedCell].hightlight = true;
-      remainingHintsAction--;
+    if (selectedCell != -1) {
+      if (sudokuCells[selectedCell].value == 0) {
+        sudokuCells[selectedCell].value = sudokuCells[selectedCell].correctValue;
+        sudokuCells[selectedCell].canEreaseValue = false;
+        sudokuCells[selectedCell].hightlight = true;
+        remainingHintsAction--;
+      }
     }
   }
 
@@ -164,12 +168,14 @@ class GameController {
           vibrate();
         }
         if (opportunities == 0) {
+          saveGameResult(lostGame);
           state = GameState.gameover;
         }
         sudokuCells[selectedCell].badIndex = true;
       } else {
         bool won = checkWin();
         if (won) {
+          saveGameResult(winGame);
           state = GameState.won;
         }
         for (int i = 0; i < 9; i++) {
@@ -276,5 +282,23 @@ class GameController {
     countdown = sudoku.countdown ?? 180;
     timer = Countdown(countdown);
     opportunities = sudoku.maxPossibleErrors!;
+  }
+
+  String getDifficultyName() {
+    return difficulty == SudokuDifficulty.easy
+        ? 'easy'
+        : difficulty == SudokuDifficulty.medium
+            ? 'medium'
+            : 'hard';
+  }
+
+  void saveGameResult(int result) {
+    objectBox.gameDBController.saveResult(
+      SudokuStat(
+        time: timer.time,
+        level: getDifficultyName(),
+        result: result,
+      ),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/widgets/layout.dart';
 import 'package:sudoku/widgets/setting.dart';
+import 'package:sudoku/widgets/version.dart';
 
 class SettingsManagerView extends StatefulWidget {
   final SettingsManager settingsManager;
@@ -86,9 +87,9 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 50),
               Setting(
-                icon: 'assets/icons/audio.png',
+                icon: 'assets/icons/volume.png',
                 title: 'Sonido',
                 label: 'Ajusta el volumen para cada acción del juego.',
                 actualValue: '${widget.settingsManager.getAudioSettingsManager().getAudioVolume()}',
@@ -116,7 +117,7 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                 ),
               ),
               Setting(
-                icon: 'assets/icons/music.png',
+                icon: 'assets/icons/musical-note.png',
                 title: 'Música',
                 label: 'Ajusta el volumen de la música de fondo cuando estás jugando.',
                 actualValue: '${widget.settingsManager.getAudioSettingsManager().getBackgroundVolume()}',
@@ -144,7 +145,7 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                 ),
               ),
               Setting(
-                icon: 'assets/icons/audio.png',
+                icon: 'assets/icons/visual-guide3.png',
                 title: 'Guía Visual',
                 label: 'Señaliza la fila, columna y región correspondiente a la celda seleccionada',
                 actualValue: widget.settingsManager.getVisualGuide() ? 'On' : 'Off',
@@ -172,7 +173,7 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                 ),
               ),
               Setting(
-                icon: 'assets/icons/music.png',
+                icon: 'assets/icons/vibrate.png',
                 title: 'Vibrar',
                 label: 'Tu dispositivo vibrará si cometes un error en el juego.',
                 actualValue: widget.settingsManager.getCanVibrate() ? 'On' : 'Off',
@@ -199,7 +200,7 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                   ),
                 ),
               ),
-              Setting(
+              /*Setting(
                 icon: 'assets/icons/audio.png',
                 title: 'Guardar',
                 label: 'Cada cierto tiempo se va guardando tu progreso en la partida.',
@@ -226,24 +227,11 @@ class _SettingsManagerState extends State<SettingsManagerView> {
                     ),
                   ),
                 ),
-              ),
-              //TODO: SPACE FOR SETTINGS
+              ),*/
             ],
           ),
-          Container(
-            width: size.width * 0.77,
-            height: size.height * 0.07,
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: Container(
-              alignment: Alignment.center,
-              child: const Text(
-                'JK STUDIOS - Version 0.4.3',
-                style: TextStyle(
-                  color: SudokuColors.congressBlue,
-                  fontSize: 12,
-                ),
-              ),
-            ),
+          VersionApp(
+            size: Size(size.width * 0.77, size.height * 0.07),
           ),
         ],
       ),

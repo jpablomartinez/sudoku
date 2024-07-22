@@ -60,10 +60,7 @@ class Setting extends StatelessWidget {
             child: Center(
               child: Image.asset(
                 icon,
-                color: const Color(
-                  0xff398BED,
-                ),
-                height: 24,
+                height: 29,
               ),
             ),
           ),

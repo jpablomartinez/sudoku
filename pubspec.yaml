@@ -39,6 +39,7 @@ dependencies:
     audioplayers: ^6.0.0
     objectbox: ^4.0.1
     objectbox_flutter_libs: ^4.0.1
+    flutter_native_splash: ^2.4.1
 
 dev_dependencies:
     flutter_test:
@@ -68,6 +69,7 @@ flutter:
         - assets/icons/
         - assets/audio/
         - assets/images/
+        - assets/splash.png
 
     fonts:
         - family: Gluten
@@ -116,3 +118,13 @@ flutter:
     #
     # For details regarding fonts from package dependencies,
     # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+    android: true
+    ios: true
+    web: false
+    image: assets/splash.png
+    color: '#FFFFFF'
+    android_12:
+        image: assets/splash.png
+        color: '#FFFFFF'

@@ -137,7 +137,7 @@ class _GameModesState extends State<GameModes> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 30),
                   Column(
                     children: [
                       SquareSeletorButton(

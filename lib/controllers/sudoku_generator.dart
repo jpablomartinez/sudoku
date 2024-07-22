@@ -18,8 +18,8 @@ class SudokuGenerator {
   }
 
   bool valueIsInSubMatrix(int value, int index) {
-    int rowStart = (index ~/ 9) ~/ 3 * 3;
-    int colStart = (index % 9) ~/ 3 * 3;
+    int rowStart = ((index ~/ 9) ~/ 3) * 3;
+    int colStart = ((index % 9) ~/ 3) * 3;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
         if (sudokuCells[(rowStart + i) * 9 + (colStart + j)] == value) {
@@ -42,9 +42,9 @@ class SudokuGenerator {
     if (sudokuCells[index] != 0) return solveSudoku(index + 1); // Skip pre-filled cells
 
     List<int> numbers = List.generate(9, (i) => i + 1)..shuffle(random); // Randomize the order of numbers
-    for (int num in numbers) {
-      if (checkCell(num, index)) {
-        sudokuCells[index] = num;
+    for (int v in numbers) {
+      if (checkCell(v, index)) {
+        sudokuCells[index] = v;
         if (solveSudoku(index + 1)) return true;
         sudokuCells[index] = 0; // Reset cell on failure
       }
@@ -62,12 +62,11 @@ class SudokuGenerator {
     // Add a few random numbers to start with to ensure randomness
     for (int i = 0; i < 20; i++) {
       int index = random.nextInt(81);
-      int num = random.nextInt(9) + 1;
-      if (sudokuCells[index] == 0 && checkCell(num, index)) {
-        sudokuCells[index] = num;
+      int v = random.nextInt(9) + 1;
+      if (sudokuCells[index] == 0 && checkCell(v, index)) {
+        sudokuCells[index] = v;
       }
     }
-
-    solveSudoku(0);
+    bool res = solveSudoku(0);
   }
 }

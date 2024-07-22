@@ -8,6 +8,7 @@ import 'package:sudoku/screens/records.dart';
 import 'package:sudoku/screens/settings.dart';
 import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/square_button.dart';
+import 'package:sudoku/widgets/version.dart';
 
 class TitleScreen extends StatefulWidget {
   const TitleScreen({super.key});
@@ -91,13 +92,11 @@ class _TitleScreenState extends State<TitleScreen> {
                           borderColor: SudokuColors.dodgerBlueDarker,
                           labelColor: Colors.white,
                           label: 'Jugar',
-                          icon: Transform.rotate(
-                            angle: math.pi,
-                            child: Image.asset(
-                              'assets/icons/play2.png',
-                              height: 18,
-                              color: SudokuColors.dodgerBlueDarker,
-                            ),
+                          withBackground: true,
+                          icon: Image.asset(
+                            'assets/icons/gameboy.png',
+                            height: 24,
+                            //color: SudokuColors.dodgerBlueDarker,
                           ),
                           onTap: () {
                             settingsManager.getAudioSettingsManager().playSelectAudio();
@@ -116,9 +115,8 @@ class _TitleScreenState extends State<TitleScreen> {
                           labelColor: SudokuColors.dodgerBlueDarker,
                           label: 'Registros',
                           icon: Image.asset(
-                            'assets/icons/gamepad.png',
-                            height: 18,
-                            color: SudokuColors.dodgerBlueDarker,
+                            'assets/icons/memory-card2.png',
+                            height: 24,
                           ),
                           onTap: () {
                             settingsManager.getAudioSettingsManager().playSelectAudio();
@@ -133,9 +131,8 @@ class _TitleScreenState extends State<TitleScreen> {
                           labelColor: SudokuColors.dodgerBlueDarker,
                           label: 'Ajustes',
                           icon: Image.asset(
-                            'assets/icons/settings2.png',
-                            height: 22,
-                            color: SudokuColors.dodgerBlueDarker,
+                            'assets/icons/settings4.png',
+                            height: 24,
                           ),
                           onTap: () {
                             settingsManager.getAudioSettingsManager().playSelectAudio();
@@ -149,18 +146,12 @@ class _TitleScreenState extends State<TitleScreen> {
                   ),
                 ],
               ),
-              Container(
-                width: size.width,
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: const Text(
-                  'JK STUDIOS - versión 0.4.3',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: SudokuColors.congressBlue,
-                  ),
+              VersionApp(
+                size: Size(
+                  size.width,
+                  size.height * 0.07,
                 ),
-              )
+              ),
             ],
           ),
         ),

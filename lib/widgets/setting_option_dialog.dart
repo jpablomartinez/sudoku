@@ -32,10 +32,9 @@ class SettingOptionDialog extends StatelessWidget {
         children: [
           Image.asset(
             iconPath,
-            color: SudokuColors.congressBlue,
-            height: 18,
+            height: 23,
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 10),
           SizedBox(
             width: 105,
             child: Text(

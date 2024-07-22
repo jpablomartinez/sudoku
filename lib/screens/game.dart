@@ -412,7 +412,7 @@ class _GameViewState extends State<GameView> {
                   Column(
                     children: [
                       SettingOptionDialog(
-                        iconPath: 'assets/icons/audio.png',
+                        iconPath: 'assets/icons/volume.png',
                         title: 'Sonido',
                         width: size.width * 0.85 - 195,
                         onChanged: (double value) {
@@ -423,7 +423,7 @@ class _GameViewState extends State<GameView> {
                         value: widget.settingsManager.getAudioSettingsManager().getAudioVolume().toDouble(),
                       ),
                       SettingOptionDialog(
-                        iconPath: 'assets/icons/music.png',
+                        iconPath: 'assets/icons/musical-note.png',
                         title: 'Música',
                         width: size.width * 0.85 - 195,
                         onChanged: (double value) {
@@ -434,7 +434,7 @@ class _GameViewState extends State<GameView> {
                         value: widget.settingsManager.getAudioSettingsManager().getBackgroundVolume().toDouble(),
                       ),
                       SettingOptionDialog(
-                        iconPath: 'assets/icons/audio.png',
+                        iconPath: 'assets/icons/visual-guide3.png',
                         title: 'Guía visual',
                         width: size.width * 0.85 * 0.21,
                         onChanged: (double value) {
@@ -448,7 +448,7 @@ class _GameViewState extends State<GameView> {
                         value: widget.settingsManager.getVisualGuide() ? 2 : 1,
                       ),
                       SettingOptionDialog(
-                        iconPath: 'assets/icons/music.png',
+                        iconPath: 'assets/icons/vibrate.png',
                         title: 'Vibrar',
                         onChanged: (double value) {
                           setState(() {
@@ -461,7 +461,7 @@ class _GameViewState extends State<GameView> {
                         width: size.width * 0.85 * 0.21,
                         value: widget.settingsManager.getCanVibrate() ? 2 : 1,
                       ),
-                      SettingOptionDialog(
+                      /*SettingOptionDialog(
                         iconPath: 'assets/icons/audio.png',
                         title: 'Guardar',
                         onChanged: (double value) {
@@ -474,7 +474,7 @@ class _GameViewState extends State<GameView> {
                         divisions: 1,
                         width: size.width * 0.85 * 0.21,
                         value: widget.settingsManager.getSaveOnExit() ? 2 : 1,
-                      ),
+                      ),*/
                     ],
                   ),
                 ],
@@ -550,7 +550,7 @@ class _GameViewState extends State<GameView> {
                       children: [
                         RoundedButton(
                           icon: Image.asset(
-                            'assets/icons/home.png',
+                            'assets/icons/home1.png',
                             width: 22,
                           ),
                           onTap: () async {
@@ -592,9 +592,8 @@ class _GameViewState extends State<GameView> {
                             ),
                             RoundedButton(
                               icon: Image.asset(
-                                'assets/icons/settings2.png',
-                                color: SudokuColors.cerulean,
-                                width: 22,
+                                'assets/icons/settings4.png',
+                                width: 24,
                               ),
                               onTap: () => openSettingsDialog(size),
                               size: const Size(42, 42),
@@ -625,7 +624,7 @@ class _GameViewState extends State<GameView> {
                       children: [
                         ActionButton(
                           backgroundColor: SudokuColors.onahu,
-                          icon: Image.asset('assets/icons/erase.png', width: 24),
+                          icon: Image.asset('assets/icons/erase.png', width: 28),
                           onTap: () => erase(),
                         ),
                         ActionButton(
@@ -635,7 +634,7 @@ class _GameViewState extends State<GameView> {
                         ),
                         ActionButton(
                           backgroundColor: SudokuColors.onahu,
-                          icon: Image.asset('assets/icons/hint.png', width: 25),
+                          icon: Image.asset('assets/icons/idea.png', width: 28),
                           remainingAction: gameController.remainingHintsAction,
                           onTap: () => useHint(),
                         ),

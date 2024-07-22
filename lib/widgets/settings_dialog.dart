@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/colors.dart';
-import 'dart:math' as math;
-
 import 'package:sudoku/widgets/triangle_clipper.dart';
+import 'package:sudoku/widgets/version.dart';
 
 class SettingsDialog extends StatefulWidget {
   final Widget widget;
@@ -133,7 +132,7 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
                           Container(
                             alignment: Alignment.center,
                             child: const Text(
-                              'JK STUDIOS - Version 0.4.3',
+                              'JK STUDIOS - Version $version',
                               style: TextStyle(
                                 color: SudokuColors.congressBlue,
                                 fontSize: 12,

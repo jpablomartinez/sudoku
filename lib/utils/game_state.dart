@@ -5,3 +5,6 @@ enum GameState {
   won,
   gameover,
 }
+
+const int winGame = 1;
+const int lostGame = 0;

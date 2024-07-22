@@ -30,7 +30,7 @@ class ActionButton extends StatelessWidget {
               height: 60,
               margin: const EdgeInsets.symmetric(horizontal: 3),
               decoration: BoxDecoration(
-                color: backgroundColor,
+                color: backgroundColor.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
