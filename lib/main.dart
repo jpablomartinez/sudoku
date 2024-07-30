@@ -24,7 +24,7 @@ class SudokuGameView extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Gluten',
       ),
-      home: const TitleScreen(),
+      home: const MainMenu(),
     );
   }
 }

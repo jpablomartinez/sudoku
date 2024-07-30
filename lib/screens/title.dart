@@ -10,14 +10,14 @@ import 'package:sudoku/widgets/responsive_screen.dart';
 import 'package:sudoku/widgets/square_button.dart';
 import 'package:sudoku/widgets/version.dart';
 
-class TitleScreen extends StatefulWidget {
-  const TitleScreen({super.key});
+class MainMenu extends StatefulWidget {
+  const MainMenu({super.key});
 
   @override
-  State<TitleScreen> createState() => _TitleScreenState();
+  State<MainMenu> createState() => _MainMenuState();
 }
 
-class _TitleScreenState extends State<TitleScreen> {
+class _MainMenuState extends State<MainMenu> {
   late AudioSettingsManager audioSettingsManager;
   late SettingsManager settingsManager;
 

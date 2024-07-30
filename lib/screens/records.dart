@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sudoku/classes/stat.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/main.dart';
+import 'package:sudoku/widgets/arrow_back.dart';
 import 'package:sudoku/widgets/record_info.dart';
 import 'package:sudoku/widgets/responsive_screen.dart';
+import 'package:sudoku/widgets/title_screen.dart';
 
 //TODO: IMPROVE THIS CODE
 class RecordsView extends StatefulWidget {
@@ -56,59 +58,8 @@ class _RecordsViewState extends State<RecordsView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          color: SudokuColors.onahu,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: SudokuColors.onahu.withOpacity(0.8),
-                              offset: const Offset(0, 4),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/icons/arrow2.png',
-                            height: 17,
-                            color: const Color(0xff3B95FF),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: size.width * 0.61,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: SudokuColors.onahu,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: const Color(0xff9FC6F3),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: SudokuColors.onahu.withOpacity(0.8),
-                            offset: const Offset(0, 4),
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Records',
-                          style: TextStyle(
-                            color: SudokuColors.dodgerBlueDarker,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
+                    ArrowBack(onTap: () => Navigator.pop(context)),
+                    const TitleScreen(title: 'Records'),
                     const SizedBox(),
                   ],
                 ),

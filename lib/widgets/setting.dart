@@ -29,13 +29,13 @@ class Setting extends StatelessWidget {
         color: SudokuColors.onahu.withOpacity(0.7),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xff9FC6F3)),
-        boxShadow: [
+        /*boxShadow: [
           BoxShadow(
             color: const Color(0xff398BED).withOpacity(0.2),
             offset: const Offset(0, 4),
             blurRadius: 4,
           )
-        ],
+        ],*/
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,13 +49,13 @@ class Setting extends StatelessWidget {
               border: Border.all(
                 color: const Color(0xff00ADE3),
               ),
-              boxShadow: [
+              /*boxShadow: [
                 BoxShadow(
                   color: const Color(0xff00ADE3).withOpacity(0.1),
                   offset: const Offset(0, 4),
                   blurRadius: 4,
                 )
-              ],
+              ],*/
             ),
             child: Center(
               child: Image.asset(

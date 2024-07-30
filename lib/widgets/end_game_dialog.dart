@@ -64,15 +64,15 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
   }
 
   Widget getStars() {
-    double initialLeft = 20;
-    double initialTopOffset = 0.29;
-    double initialHeight = 40;
+    const double initialLeft = 30;
+    const double initialTopOffset = 0.29;
+    const double leftIncrement = 3;
 
-    const double heightIncrement = 13;
-    const double leftIncrement = 10;
-    const double topDecrement = 38;
-    const double heightReset = 26;
-    const double topReset = 76;
+    double initialHeight = widget.dialogSize.height * 0.10;
+    double heightIncrement = widget.dialogSize.height * 0.02;
+    double topDecrement = widget.dialogSize.height * 0.10 - 5; //38;
+    double heightReset = widget.dialogSize.height * 0.04;
+    double topReset = (widget.dialogSize.height * 0.10 - 5) * 2;
 
     List<Widget> stars = [];
     double left = initialLeft;
@@ -135,7 +135,6 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                     ),
                     const SizedBox(height: 5),
                     SizedBox(
-                      //color: Colors.red,
                       height: widget.dialogSize.height * 0.38,
                       width: widget.dialogSize.width * 0.9,
                       child: getStars(),

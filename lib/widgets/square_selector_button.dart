@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sudoku/colors.dart';
 
 class SquareSeletorButton extends StatelessWidget {
   final String title;
@@ -35,14 +34,14 @@ class SquareSeletorButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: backgroundColor,
-          border: Border.all(color: isSelected ? borderColor : backgroundColor, width: 2.5),
-          boxShadow: [
+          border: Border.all(color: isSelected ? borderColor : backgroundColor, width: 2),
+          /*boxShadow: [
             BoxShadow(
               color: SudokuColors.onahu.withOpacity(0.8),
               offset: const Offset(0, 4),
               blurRadius: 2,
             ),
-          ],
+          ],*/
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

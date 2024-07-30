@@ -73,7 +73,7 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Positioned(
+                      /*Positioned(
                         left: sizeOrientation.width / 2 - 10,
                         bottom: -20,
                         child: ClipPath(
@@ -86,7 +86,7 @@ class _AlertDialogState extends State<SettingsDialog> with SingleTickerProviderS
                             ),
                           ),
                         ),
-                      ),
+                      ),*/
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         width: sizeOrientation.width,

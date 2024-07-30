@@ -461,20 +461,6 @@ class _GameViewState extends State<GameView> {
                         width: size.width * 0.85 * 0.21,
                         value: widget.settingsManager.getCanVibrate() ? 2 : 1,
                       ),
-                      /*SettingOptionDialog(
-                        iconPath: 'assets/icons/audio.png',
-                        title: 'Guardar',
-                        onChanged: (double value) {
-                          setState(() {
-                            widget.settingsManager.setSaveOnExit(value == 2);
-                          });
-                        },
-                        min: 1,
-                        max: 2,
-                        divisions: 1,
-                        width: size.width * 0.85 * 0.21,
-                        value: widget.settingsManager.getSaveOnExit() ? 2 : 1,
-                      ),*/
                     ],
                   ),
                 ],
@@ -487,16 +473,10 @@ class _GameViewState extends State<GameView> {
                 child: Container(
                   height: 33,
                   width: 33,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFA604B),
+                  padding: const EdgeInsets.all(3),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffFA604B),
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xffFA604B).withOpacity(0.25),
-                        offset: const Offset(0, 4),
-                        blurRadius: 4,
-                      ),
-                    ],
                   ),
                   child: const Center(
                     child: Text(
@@ -583,7 +563,8 @@ class _GameViewState extends State<GameView> {
                                     ),
                               onTap: () {
                                 if (gameController.state == GameState.play) {
-                                  pauseGame();
+                                  openGameOverDialog();
+                                  //pauseGame();
                                 } else if (gameController.state == GameState.paused) {
                                   playGame();
                                 }

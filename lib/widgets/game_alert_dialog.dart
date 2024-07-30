@@ -87,7 +87,7 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Positioned(
+                    /*Positioned(
                       left: sizeOrientation.width / 2 - 10,
                       bottom: -20,
                       child: ClipPath(
@@ -100,7 +100,7 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
                           ),
                         ),
                       ),
-                    ),
+                    ),*/
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       width: sizeOrientation.width,
@@ -162,13 +162,13 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
                                 decoration: BoxDecoration(
                                   color: SudokuColors.onahu,
                                   borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
+                                  /*boxShadow: [
                                     BoxShadow(
                                       color: SudokuColors.onahu.withOpacity(0.25),
                                       offset: Offset(0, 4),
                                       blurRadius: 4,
                                     ),
-                                  ],
+                                  ],*/
                                 ),
                                 child: widget.leftButton,
                               ),
@@ -184,13 +184,13 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
                                 decoration: BoxDecoration(
                                   color: const Color(0xff3B95FF),
                                   borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
+                                  /*boxShadow: [
                                     BoxShadow(
                                       color: Color(0xff3B95FF).withOpacity(0.25),
                                       offset: Offset(0, 4),
                                       blurRadius: 4,
                                     ),
-                                  ],
+                                  ],*/
                                 ),
                                 child: widget.rightButton,
                               ),

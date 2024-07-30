@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/screens/game.dart';
+import 'package:sudoku/screens/title.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/time_mode.dart';
+import 'package:sudoku/widgets/arrow_back.dart';
 import 'package:sudoku/widgets/fade_transition.dart';
 import 'package:sudoku/widgets/responsive_screen.dart';
 import 'package:sudoku/widgets/square_selector_button.dart';
+import 'package:sudoku/widgets/title_screen.dart';
 
 class GameModes extends StatefulWidget {
   final SettingsManager settingsManager;
@@ -74,59 +77,8 @@ class _GameModesState extends State<GameModes> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        color: SudokuColors.onahu,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: SudokuColors.onahu.withOpacity(0.8),
-                            offset: const Offset(0, 4),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/icons/arrow2.png',
-                          height: 17,
-                          color: const Color(0xff3B95FF),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: size.width * 0.61,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: SudokuColors.onahu,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color(0xff9FC6F3),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: SudokuColors.onahu.withOpacity(0.8),
-                          offset: const Offset(0, 4),
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Modos de juego',
-                        style: TextStyle(
-                          color: SudokuColors.dodgerBlueDarker,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
+                  ArrowBack(onTap: () => Navigator.pop(context)),
+                  const TitleScreen(title: 'Modos de juego'),
                   const SizedBox(),
                 ],
               ),

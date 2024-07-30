@@ -53,6 +53,9 @@ class GameController {
       fixValueOnBoard(indexes.first);
       indexes.removeAt(0);
     }
+    for (int i = 0; i < 81; i++) {
+      sudokuCells[i].correctValue = sudokuGenerator.sudokuCells[i];
+    }
   }
 
   void fixValueOnBoard(int index) {
