@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/colors.dart';
 
-const String version = '0.5.1';
+const String version = '0.5.5';
 
 class VersionApp extends StatelessWidget {
   final double fontSize;
@@ -15,12 +15,11 @@ class VersionApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size.width,
       height: size.height,
-      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Container(
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         child: Text(
           'JK STUDIOS - Version $version',
           style: TextStyle(

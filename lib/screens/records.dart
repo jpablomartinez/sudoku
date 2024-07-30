@@ -3,7 +3,9 @@ import 'package:sudoku/classes/stat.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/main.dart';
 import 'package:sudoku/widgets/record_info.dart';
+import 'package:sudoku/widgets/responsive_screen.dart';
 
+//TODO: IMPROVE THIS CODE
 class RecordsView extends StatefulWidget {
   const RecordsView({
     super.key,
@@ -39,30 +41,22 @@ class _RecordsViewState extends State<RecordsView> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-        height: size.height,
-        width: size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg-blue.png'),
-            opacity: 0.5,
-            fit: BoxFit.contain,
+          //height: size.height,
+          //width: size.width,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/bg-blue.png'),
+              opacity: 0.5,
+              fit: BoxFit.contain,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: size.height * 0.05,
-                  ),
-                  Container(
-                    width: size.width,
-                    height: 60,
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
+          child: ResponsiveScreen(
+            squarishMainArea: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
                         height: 45,
@@ -87,211 +81,210 @@ class _RecordsViewState extends State<RecordsView> {
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: size.width * 0.61,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: SudokuColors.onahu,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color(0xff9FC6F3),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: SudokuColors.onahu.withOpacity(0.8),
-                          offset: const Offset(0, 4),
-                          blurRadius: 2,
+                    Container(
+                      width: size.width * 0.61,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: SudokuColors.onahu,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color(0xff9FC6F3),
                         ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Records',
-                        style: TextStyle(
-                          color: SudokuColors.dodgerBlueDarker,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  FutureBuilder(
-                    future: stats,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: Text('Cargando datos'),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: size.height - 290,
-                          child: ListView(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                alignment: Alignment.centerLeft,
-                                height: 40,
-                                width: size.width,
-                                decoration: BoxDecoration(
-                                  color: SudokuColors.onahu.withOpacity(0.8),
-                                ),
-                                child: const Text(
-                                  'Principiante',
-                                  style: TextStyle(
-                                    color: Color(0xff3B95FF),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/gameboy.png',
-                                label: 'Juegos',
-                                amount: '${gameResults[0].matches}',
-                                chipColor: const Color(0xff4D7AD0),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/trophy.png',
-                                label: 'Victorias',
-                                amount: '${gameResults[0].win}',
-                                chipColor: const Color(0xff4DD089),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/game-over2.png',
-                                label: 'Derrotas',
-                                amount: '${gameResults[0].gameOver}',
-                                chipColor: const Color(0xffFA604B),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/timer.png',
-                                label: 'Mejor Tiempo',
-                                amount: formatTimer(gameResults[0].time ?? 0),
-                                chipColor: const Color(0xff834BFA),
-                                size: size,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                alignment: Alignment.centerLeft,
-                                height: 40,
-                                width: size.width,
-                                decoration: BoxDecoration(
-                                  color: SudokuColors.onahu.withOpacity(0.8),
-                                ),
-                                child: const Text(
-                                  'Intermedio',
-                                  style: TextStyle(
-                                    color: Color(0xff3B95FF),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/gameboy.png',
-                                label: 'Juegos',
-                                amount: '${gameResults[1].matches}',
-                                chipColor: const Color(0xff4D7AD0),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/trophy.png',
-                                label: 'Victorias',
-                                amount: '${gameResults[1].win}',
-                                chipColor: const Color(0xff4DD089),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/game-over2.png',
-                                label: 'Derrotas',
-                                amount: '${gameResults[1].gameOver}',
-                                chipColor: const Color(0xffFA604B),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/timer.png',
-                                label: 'Mejor Tiempo',
-                                amount: formatTimer(gameResults[1].time ?? 0),
-                                chipColor: const Color(0xff834BFA),
-                                size: size,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                alignment: Alignment.centerLeft,
-                                height: 40,
-                                width: size.width,
-                                decoration: BoxDecoration(
-                                  color: SudokuColors.onahu.withOpacity(0.8),
-                                ),
-                                child: const Text(
-                                  'Experto',
-                                  style: TextStyle(
-                                    color: Color(0xff3B95FF),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/gameboy.png',
-                                label: 'Juegos',
-                                amount: '${gameResults[2].matches}',
-                                chipColor: const Color(0xff4D7AD0),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/trophy.png',
-                                label: 'Victorias',
-                                amount: '${gameResults[2].win}',
-                                chipColor: const Color(0xff4DD089),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/game-over2.png',
-                                label: 'Derrotas',
-                                amount: '${gameResults[2].gameOver}',
-                                chipColor: const Color(0xffFA604B),
-                                size: size,
-                              ),
-                              RecordInfo(
-                                icon: 'assets/icons/timer.png',
-                                label: 'Mejor Tiempo',
-                                amount: formatTimer(gameResults[2].time ?? 0),
-                                chipColor: const Color(0xff834BFA),
-                                size: size,
-                              ),
-                            ],
+                        boxShadow: [
+                          BoxShadow(
+                            color: SudokuColors.onahu.withOpacity(0.8),
+                            offset: const Offset(0, 4),
+                            blurRadius: 2,
                           ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Records',
+                          style: TextStyle(
+                            color: SudokuColors.dodgerBlueDarker,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                FutureBuilder(
+                  future: stats,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: Text('Cargando datos'),
+                      );
+                    } else {
+                      return Expanded(
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              alignment: Alignment.centerLeft,
+                              height: 40,
+                              width: size.width,
+                              decoration: BoxDecoration(
+                                color: SudokuColors.onahu.withOpacity(0.8),
+                              ),
+                              child: const Text(
+                                'Principiante',
+                                style: TextStyle(
+                                  color: Color(0xff3B95FF),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/gameboy.png',
+                              label: 'Juegos',
+                              amount: '${gameResults[0].matches}',
+                              chipColor: const Color(0xff4D7AD0),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/trophy.png',
+                              label: 'Victorias',
+                              amount: '${gameResults[0].win}',
+                              chipColor: const Color(0xff4DD089),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/game-over2.png',
+                              label: 'Derrotas',
+                              amount: '${gameResults[0].gameOver}',
+                              chipColor: const Color(0xffFA604B),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/timer.png',
+                              label: 'Mejor Tiempo',
+                              amount: formatTimer(gameResults[0].time ?? 0),
+                              chipColor: const Color(0xff834BFA),
+                              size: size,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              alignment: Alignment.centerLeft,
+                              height: 40,
+                              width: size.width,
+                              decoration: BoxDecoration(
+                                color: SudokuColors.onahu.withOpacity(0.8),
+                              ),
+                              child: const Text(
+                                'Intermedio',
+                                style: TextStyle(
+                                  color: Color(0xff3B95FF),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/gameboy.png',
+                              label: 'Juegos',
+                              amount: '${gameResults[1].matches}',
+                              chipColor: const Color(0xff4D7AD0),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/trophy.png',
+                              label: 'Victorias',
+                              amount: '${gameResults[1].win}',
+                              chipColor: const Color(0xff4DD089),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/game-over2.png',
+                              label: 'Derrotas',
+                              amount: '${gameResults[1].gameOver}',
+                              chipColor: const Color(0xffFA604B),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/timer.png',
+                              label: 'Mejor Tiempo',
+                              amount: formatTimer(gameResults[1].time ?? 0),
+                              chipColor: const Color(0xff834BFA),
+                              size: size,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              alignment: Alignment.centerLeft,
+                              height: 40,
+                              width: size.width,
+                              decoration: BoxDecoration(
+                                color: SudokuColors.onahu.withOpacity(0.8),
+                              ),
+                              child: const Text(
+                                'Experto',
+                                style: TextStyle(
+                                  color: Color(0xff3B95FF),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/gameboy.png',
+                              label: 'Juegos',
+                              amount: '${gameResults[2].matches}',
+                              chipColor: const Color(0xff4D7AD0),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/trophy.png',
+                              label: 'Victorias',
+                              amount: '${gameResults[2].win}',
+                              chipColor: const Color(0xff4DD089),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/game-over2.png',
+                              label: 'Derrotas',
+                              amount: '${gameResults[2].gameOver}',
+                              chipColor: const Color(0xffFA604B),
+                              size: size,
+                            ),
+                            RecordInfo(
+                              icon: 'assets/icons/timer.png',
+                              label: 'Mejor Tiempo',
+                              amount: formatTimer(gameResults[2].time ?? 0),
+                              chipColor: const Color(0xff834BFA),
+                              size: size,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+            rectangularMenuArea: const SizedBox(),
+          )),
     );
   }
 }

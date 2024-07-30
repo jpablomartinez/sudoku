@@ -47,26 +47,11 @@ class GameController {
     sudokuGenerator.generateSudokuBoard();
   }
 
-  void showSudokuBoard() {
-    int count = 0;
-    int countVisibleValues = 0;
-    bool tmp = false;
-    for (int i = 0; i < 81; i++) {
-      bool show = random.nextBool();
-      if (tmp == show) {
-        count++;
-        if (count == 5) {
-          show = !show;
-          count = 0;
-        }
-      } else {
-        count = 0;
-      }
-      if (show && countVisibleValues <= sudoku.maxVisibleValues!) {
-        fixValueOnBoard(i);
-        //countVisibleValues++;
-      }
-      sudokuCells[i].correctValue = sudokuGenerator.sudokuCells[i];
+  void showSudokuBoard(int amountVisibleValues) {
+    List<int> indexes = List.generate(81, (int index) => index)..shuffle();
+    for (int i = 0; i < sudoku.maxVisibleValues!; i++) {
+      fixValueOnBoard(indexes.first);
+      indexes.removeAt(0);
     }
   }
 
@@ -81,7 +66,7 @@ class GameController {
     sudokuCells = List.generate(81, (int index) => SudokuCell(index, SudokuCellState.normal, annotations: []));
     //remainingEreaseAction = sudoku.maxEreaseAction!;
     remainingHintsAction = sudoku.availableHints!;
-    showSudokuBoard();
+    showSudokuBoard(sudoku.maxVisibleValues ?? 37);
     availableNumberButtons = List.generate(9, (int index) => true);
     countdown = sudoku.countdown ?? 180;
     timer = Countdown(countdown);
@@ -277,7 +262,7 @@ class GameController {
     prepareSudokuGenerator();
     sudokuCells = List.generate(81, (int index) => SudokuCell(index, SudokuCellState.normal, annotations: []));
     remainingHintsAction = sudoku.availableHints!;
-    showSudokuBoard();
+    showSudokuBoard(sudoku.maxVisibleValues ?? 37);
     availableNumberButtons = List.generate(9, (int index) => true);
     countdown = sudoku.countdown ?? 180;
     timer = Countdown(countdown);

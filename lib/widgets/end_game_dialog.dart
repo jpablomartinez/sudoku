@@ -64,11 +64,22 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
   }
 
   Widget getStars() {
+    double initialLeft = 20;
+    double initialTopOffset = 0.29;
+    double initialHeight = 40;
+
+    const double heightIncrement = 13;
+    const double leftIncrement = 10;
+    const double topDecrement = 38;
+    const double heightReset = 26;
+    const double topReset = 76;
+
     List<Widget> stars = [];
-    double left = 10;
-    double top = widget.dialogSize.height * 0.29 - 40;
-    double height = 40;
+    double left = initialLeft;
+    double top = widget.dialogSize.height * initialTopOffset - initialHeight;
+    double height = initialHeight;
     int j = 0;
+
     for (int i = 0; i < widget.maxPoints; i++) {
       stars.add(
         Positioned(
@@ -80,13 +91,13 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
           ),
         ),
       );
-      left += height + 10;
-      height += 13;
-      top -= 38;
+      left += height + leftIncrement;
+      height += heightIncrement;
+      top -= topDecrement;
       j++;
       if (j > 2) {
-        height -= 26;
-        top += 76;
+        height -= heightReset;
+        top += topReset;
       }
     }
     return Stack(
@@ -124,8 +135,9 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                     ),
                     const SizedBox(height: 5),
                     SizedBox(
-                      height: widget.dialogSize.height * 0.35,
-                      width: widget.dialogSize.width * 0.8,
+                      //color: Colors.red,
+                      height: widget.dialogSize.height * 0.38,
+                      width: widget.dialogSize.width * 0.9,
                       child: getStars(),
                     ),
                     const SizedBox(height: 5),
@@ -181,6 +193,7 @@ class _EndgameDialogState extends State<EndgameDialog> with SingleTickerProvider
                         ),
                       ],
                     ),
+                    const SizedBox(height: 13),
                   ],
                 ),
                 Row(

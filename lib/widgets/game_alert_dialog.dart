@@ -96,7 +96,7 @@ class _AlertDialogState extends State<GameAlertDialog> with SingleTickerProvider
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
-                            color: const Color(0xff4B9CFA).withOpacity(0.7),
+                            color: const Color(0xff4B9CFA).withOpacity(0.8),
                           ),
                         ),
                       ),

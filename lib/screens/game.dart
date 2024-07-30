@@ -286,7 +286,7 @@ class _GameViewState extends State<GameView> {
           titleColor: const Color(0xff30DC7F),
           decorator: winDialogColor,
           message: winMessage,
-          dialogSize: getSizeForDialog(0.93, 0.44),
+          dialogSize: getSizeForDialog(0.85, 0.47),
           curve: Curves.easeOutQuint,
           rightButton: () => restartGame(),
           leftButton: () {
@@ -314,7 +314,7 @@ class _GameViewState extends State<GameView> {
           leftButtonColor: const Color(0xffB7D8FF),
           rightButtonColor: const Color(0xff3B95FF),
           titleColor: const Color(0xffFA604B),
-          dialogSize: getSizeForDialog(0.93, 0.44),
+          dialogSize: getSizeForDialog(0.85, 0.47),
           rightButton: () => restartGame(),
           leftButton: () {
             Navigator.pop(context);
