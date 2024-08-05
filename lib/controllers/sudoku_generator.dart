@@ -58,7 +58,6 @@ class SudokuGenerator {
 
   void generateSudokuBoard() {
     sudokuCells = List.filled(81, 0);
-
     // Add a few random numbers to start with to ensure randomness
     for (int i = 0; i < 20; i++) {
       int index = random.nextInt(81);
@@ -68,5 +67,8 @@ class SudokuGenerator {
       }
     }
     bool res = solveSudoku(0);
+    if (!res) {
+      generateSudokuBoard();
+    }
   }
 }

@@ -43,7 +43,7 @@ class _GameViewState extends State<GameView> {
   Color winDialogColor = const Color(0xff65E8A1);
 
   void prepareGame() {
-    gameController = GameController(widget.difficulty);
+    gameController = GameController(widget.difficulty, widget.timeMode);
     board = createSudokuBoard();
     stars = getStars();
     numberOptions = createNumberButtons();
@@ -273,7 +273,7 @@ class _GameViewState extends State<GameView> {
   Future<void> openWinDialog() {
     return showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return EndgameDialog(
           title: '¡Ganaste!',
@@ -302,7 +302,7 @@ class _GameViewState extends State<GameView> {
   Future<void> openGameOverDialog() {
     return showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return EndgameDialog(
           curve: Curves.easeOutQuint,
@@ -498,139 +498,145 @@ class _GameViewState extends State<GameView> {
     );
   }
 
+  Future<bool> _onWillPop() async {
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Container(
-        width: size.width,
-        height: size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg-blue.png'),
-          ),
-        ),
-        child: Stack(
-          children: [
-            Container(
-              height: size.height * 0.4,
-              color: SudokuColors.dodgerBlue.withOpacity(0.90),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: Container(
+          width: size.width,
+          height: size.height,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/bg-blue.png'),
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                width: size.width,
-                child: Column(
-                  children: [
-                    SizedBox(height: size.height * 0.06),
-                    Row(
-                      children: [
-                        RoundedButton(
-                          icon: Image.asset(
-                            'assets/icons/home1.png',
-                            width: 22,
-                          ),
-                          onTap: () async {
-                            await openEndgameDialog();
-                          },
-                          size: const Size(42, 42),
-                        ),
-                        const Spacer(),
-                        Text(
-                          timer,
-                          style: const TextStyle(color: Colors.white, fontSize: 33),
-                        ),
-                        const Spacer(),
-                        Row(
-                          children: [
-                            RoundedButton(
-                              icon: gameController.state == GameState.play
-                                  ? Image.asset(
-                                      'assets/icons/pause2.png',
-                                      width: 12,
-                                      color: SudokuColors.cerulean,
-                                    )
-                                  : Transform.rotate(
-                                      angle: math.pi,
-                                      child: Image.asset(
-                                        'assets/icons/play2.png',
-                                        height: 18,
-                                        color: SudokuColors.cerulean,
-                                      ),
-                                    ),
-                              onTap: () {
-                                if (gameController.state == GameState.play) {
-                                  openGameOverDialog();
-                                  //pauseGame();
-                                } else if (gameController.state == GameState.paused) {
-                                  playGame();
-                                }
-                              },
-                              size: const Size(42, 42),
-                            ),
-                            RoundedButton(
-                              icon: Image.asset(
-                                'assets/icons/settings4.png',
-                                width: 24,
-                              ),
-                              onTap: () => openSettingsDialog(size),
-                              size: const Size(42, 42),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Dificultad: ${showDifficculty()}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                        stars,
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    board,
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ActionButton(
-                          backgroundColor: SudokuColors.onahu,
-                          icon: Image.asset('assets/icons/erase.png', width: 28),
-                          onTap: () => erase(),
-                        ),
-                        ActionButton(
-                          backgroundColor: gameController.writeAnnotation ? SudokuColors.malibu : SudokuColors.onahu,
-                          icon: Image.asset('assets/icons/pencil.png', width: 28),
-                          onTap: () => changeWriteAnnotation(),
-                        ),
-                        ActionButton(
-                          backgroundColor: SudokuColors.onahu,
-                          icon: Image.asset('assets/icons/idea.png', width: 28),
-                          remainingAction: gameController.remainingHintsAction,
-                          onTap: () => useHint(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    SizedBox(
-                      width: size.width,
-                      child: numberOptions,
-                    ),
-                  ],
-                ),
+          ),
+          child: Stack(
+            children: [
+              Container(
+                height: size.height * 0.4,
+                color: SudokuColors.dodgerBlue.withOpacity(0.90),
               ),
-            )
-          ],
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  width: size.width,
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height * 0.06),
+                      Row(
+                        children: [
+                          RoundedButton(
+                            icon: Image.asset(
+                              'assets/icons/home1.png',
+                              width: 22,
+                            ),
+                            onTap: () async {
+                              await openEndgameDialog();
+                            },
+                            size: const Size(42, 42),
+                          ),
+                          const Spacer(),
+                          Text(
+                            timer,
+                            style: const TextStyle(color: Colors.white, fontSize: 33),
+                          ),
+                          const Spacer(),
+                          Row(
+                            children: [
+                              RoundedButton(
+                                icon: gameController.state == GameState.play
+                                    ? Image.asset(
+                                        'assets/icons/pause2.png',
+                                        width: 12,
+                                        color: SudokuColors.cerulean,
+                                      )
+                                    : Transform.rotate(
+                                        angle: math.pi,
+                                        child: Image.asset(
+                                          'assets/icons/play2.png',
+                                          height: 18,
+                                          color: SudokuColors.cerulean,
+                                        ),
+                                      ),
+                                onTap: () {
+                                  if (gameController.state == GameState.play) {
+                                    pauseGame();
+                                  } else if (gameController.state == GameState.paused) {
+                                    playGame();
+                                  }
+                                },
+                                size: const Size(42, 42),
+                              ),
+                              RoundedButton(
+                                icon: Image.asset(
+                                  'assets/icons/settings4.png',
+                                  width: 24,
+                                ),
+                                onTap: () => openSettingsDialog(size),
+                                size: const Size(42, 42),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Dificultad: ${showDifficculty()}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          stars,
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      board,
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ActionButton(
+                            backgroundColor: SudokuColors.onahu,
+                            icon: Image.asset('assets/icons/erase.png', width: 28),
+                            onTap: () => erase(),
+                          ),
+                          ActionButton(
+                            backgroundColor: gameController.writeAnnotation ? SudokuColors.malibu : SudokuColors.onahu,
+                            icon: Image.asset('assets/icons/pencil.png', width: 28),
+                            onTap: () => changeWriteAnnotation(),
+                          ),
+                          ActionButton(
+                            backgroundColor: SudokuColors.onahu,
+                            icon: Image.asset('assets/icons/idea.png', width: 28),
+                            remainingAction: gameController.remainingHintsAction,
+                            onTap: () => useHint(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        width: size.width,
+                        child: numberOptions,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

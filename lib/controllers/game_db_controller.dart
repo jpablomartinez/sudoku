@@ -6,12 +6,12 @@ import 'package:sudoku/utils/game_state.dart';
 class GameDBController {
   late final Box<SudokuStat> stats;
 
-  List<Stat> getResultsByLevel() {
+  List<Stat> getResultsByLevel(int timeMode) {
     const levels = ['easy', 'medium', 'hard'];
     List<Stat> statsResults = [];
     for (var level in levels) {
-      Query<SudokuStat> queryWin = stats.query(SudokuStat_.level.equals(level).and(SudokuStat_.result.equals(winGame))).order(SudokuStat_.time, flags: Order.descending).build();
-      Query<SudokuStat> queryMatches = stats.query(SudokuStat_.level.equals(level)).build();
+      Query<SudokuStat> queryWin = stats.query(SudokuStat_.level.equals(level).and(SudokuStat_.result.equals(winGame).and(SudokuStat_.timeMode.equals(timeMode)))).order(SudokuStat_.time, flags: Order.descending).build();
+      Query<SudokuStat> queryMatches = stats.query(SudokuStat_.level.equals(level).and(SudokuStat_.timeMode.equals(timeMode))).build();
       List<SudokuStat> matches = queryMatches.find();
       List<SudokuStat> wins = queryWin.find();
       statsResults.add(
@@ -19,7 +19,7 @@ class GameDBController {
           matches: matches.length,
           win: wins.length,
           gameOver: matches.length - wins.length,
-          time: matches.isNotEmpty ? wins.last.time : 0,
+          time: wins.isNotEmpty ? wins.last.time : 0,
         ),
       );
     }

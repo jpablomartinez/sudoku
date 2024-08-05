@@ -43,7 +43,7 @@ class ResponsiveScreen extends StatelessWidget {
               SafeArea(
                 bottom: false,
                 child: Padding(
-                  padding: padding,
+                  padding: EdgeInsets.all(size.shortestSide / 60),
                   child: topMessageArea,
                 ),
               ),

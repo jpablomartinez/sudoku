@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 //FROM CHATGPT
 class FadeRoute extends PageRouteBuilder {
   final Widget page;
+  final int duration;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => Duration(milliseconds: duration);
 
-  FadeRoute({required this.page})
+  FadeRoute({required this.page, this.duration = 450})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -27,7 +28,7 @@ class FadeRoute extends PageRouteBuilder {
               FadeTransition(
                 opacity: CurvedAnimation(
                   parent: animation,
-                  curve: Curves.easeInOut,
+                  curve: Curves.linear,
                 ),
                 child: child,
               ),

@@ -19,6 +19,9 @@ class ArrowBack extends StatelessWidget {
         decoration: BoxDecoration(
           color: SudokuColors.onahu,
           borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: const Color(0xff9FC6F3),
+          ),
         ),
         child: Center(
           child: Image.asset(

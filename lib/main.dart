@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sudoku/controllers/database_controller.dart';
-import 'package:sudoku/screens/title.dart';
+import 'package:sudoku/screens/splash.dart';
 
 late ObjectBox objectBox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   objectBox = await ObjectBox.init();
-  print('box ready');
-  runApp(const SudokuGameView());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(const SudokuGameView());
+  });
 }
 
 class SudokuGameView extends StatelessWidget {
@@ -24,7 +29,8 @@ class SudokuGameView extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Gluten',
       ),
-      home: const MainMenu(),
+      home: const SplashScreen(),
+      initialRoute: '/',
     );
   }
 }

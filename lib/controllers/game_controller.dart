@@ -9,6 +9,7 @@ import 'package:sudoku/main.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/game_state.dart';
 import 'package:sudoku/utils/states.dart';
+import 'package:sudoku/utils/time_mode.dart';
 import 'package:vibration/vibration.dart';
 
 class GameController {
@@ -30,6 +31,21 @@ class GameController {
   GameState state = GameState.play;
   int opportunities = 0;
   List<bool> availableNumberButtons = [];
+  late SudokuTimeMode timeMode;
+
+  GameController(SudokuDifficulty difficulty, SudokuTimeMode timerMode) {
+    setGameDifficulty(difficulty);
+    prepareSudokuGenerator();
+    sudokuCells = List.generate(81, (int index) => SudokuCell(index, SudokuCellState.normal, annotations: []));
+    //remainingEreaseAction = sudoku.maxEreaseAction!;
+    remainingHintsAction = sudoku.availableHints!;
+    showSudokuBoard(sudoku.maxVisibleValues ?? 37);
+    availableNumberButtons = List.generate(9, (int index) => true);
+    countdown = sudoku.countdown ?? 180;
+    timer = Countdown(countdown);
+    opportunities = sudoku.maxPossibleErrors!;
+    timeMode = timerMode;
+  }
 
   void setGameDifficulty(SudokuDifficulty d) {
     difficulty = d;
@@ -63,19 +79,6 @@ class GameController {
     sudokuCells[index].canEreaseValue = false;
   }
 
-  GameController(SudokuDifficulty difficulty) {
-    setGameDifficulty(difficulty);
-    prepareSudokuGenerator();
-    sudokuCells = List.generate(81, (int index) => SudokuCell(index, SudokuCellState.normal, annotations: []));
-    //remainingEreaseAction = sudoku.maxEreaseAction!;
-    remainingHintsAction = sudoku.availableHints!;
-    showSudokuBoard(sudoku.maxVisibleValues ?? 37);
-    availableNumberButtons = List.generate(9, (int index) => true);
-    countdown = sudoku.countdown ?? 180;
-    timer = Countdown(countdown);
-    opportunities = sudoku.maxPossibleErrors!;
-  }
-
   void clearSelection() {
     for (int i = 0; i < 81; i++) {
       sudokuCells[i].state = SudokuCellState.normal;
@@ -99,6 +102,11 @@ class GameController {
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           sudokuCells[(rowStart + i) * 9 + (colStart + j)].state = SudokuCellState.hightlight;
+        }
+      }
+      for (int i = 0; i < 81; i++) {
+        if (sudokuCells[i].value == sudokuCells[index].value && sudokuCells[i].value != 0) {
+          sudokuCells[i].state = SudokuCellState.selected;
         }
       }
     }
@@ -131,6 +139,14 @@ class GameController {
         sudokuCells[selectedCell].canEreaseValue = false;
         sudokuCells[selectedCell].hightlight = true;
         remainingHintsAction--;
+        bool won = checkWin();
+        if (won) {
+          saveGameResult(winGame);
+          state = GameState.won;
+        }
+        for (int i = 0; i < 9; i++) {
+          availableNumberButtons[i] = countNumbersOnMatrix(i + 1);
+        }
       }
     }
   }
@@ -286,6 +302,7 @@ class GameController {
         time: timer.time,
         level: getDifficultyName(),
         result: result,
+        timeMode: timeMode == SudokuTimeMode.timer ? 1 : 2,
       ),
     );
   }

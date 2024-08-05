@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:3757361161807749610",
-      "lastPropertyId": "4:8868486448329788345",
+      "lastPropertyId": "5:7304686081228087153",
       "name": "SudokuStat",
       "properties": [
         {
@@ -27,6 +27,11 @@
         {
           "id": "4:8868486448329788345",
           "name": "result",
+          "type": 6
+        },
+        {
+          "id": "5:7304686081228087153",
+          "name": "timeMode",
           "type": 6
         }
       ],

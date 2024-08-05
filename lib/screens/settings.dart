@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/classes/settings_manager.dart';
-import 'package:sudoku/colors.dart';
 import 'package:sudoku/widgets/arrow_back.dart';
 import 'package:sudoku/widgets/responsive_screen.dart';
 import 'package:sudoku/widgets/setting.dart';

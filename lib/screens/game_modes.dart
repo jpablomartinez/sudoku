@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sudoku/classes/settings_manager.dart';
 import 'package:sudoku/colors.dart';
 import 'package:sudoku/screens/game.dart';
-import 'package:sudoku/screens/title.dart';
 import 'package:sudoku/utils/difficulty.dart';
 import 'package:sudoku/utils/time_mode.dart';
 import 'package:sudoku/widgets/arrow_back.dart';

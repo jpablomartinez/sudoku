@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/colors.dart';
-import 'package:sudoku/widgets/triangle_clipper.dart';
 
 class GameAlertDialog extends StatefulWidget {
   final String title;
