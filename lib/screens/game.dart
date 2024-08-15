@@ -62,11 +62,14 @@ class _GameViewState extends State<GameView> {
           timer = gameController.formatTimer(gameController.timer.remaining);
         });
         if (gameController.timer.remaining == 0 || gameController.timer.time >= maxGameTime) {
+          widget.settingsManager.getAudioSettingsManager().backgroundMusic.stop();
+          widget.settingsManager.getAudioSettingsManager().playGameOverAudio();
           gameController.stopGame();
           openGameOverDialog();
         }
       });
     }
+    widget.settingsManager.getAudioSettingsManager().playBackgroundMusic();
   }
 
   @override
@@ -82,6 +85,7 @@ class _GameViewState extends State<GameView> {
   }
 
   void pauseGame() {
+    widget.settingsManager.getAudioSettingsManager().backgroundMusic.pause();
     setState(() {
       gameController.state = GameState.paused;
     });
@@ -89,6 +93,7 @@ class _GameViewState extends State<GameView> {
   }
 
   void playGame() {
+    widget.settingsManager.getAudioSettingsManager().backgroundMusic.resume();
     setState(() {
       gameController.state = GameState.play;
     });
@@ -135,7 +140,7 @@ class _GameViewState extends State<GameView> {
   }
 
   void writeNumberOnCell(int value) {
-    widget.settingsManager.getAudioSettingsManager().playWriteNumberAudio();
+    widget.settingsManager.getAudioSettingsManager().playWriteNumber();
     if (gameController.isPlaying()) {
       gameController.writeNumberOnCell(value, widget.settingsManager.getCanVibrate());
       setState(() {
@@ -143,9 +148,11 @@ class _GameViewState extends State<GameView> {
         numberOptions = createNumberButtons();
       });
       if (gameController.gameover()) {
+        widget.settingsManager.getAudioSettingsManager().playGameOverAudio();
         gameController.stopGame();
         openGameOverDialog();
       } else if (gameController.wonGame()) {
+        widget.settingsManager.getAudioSettingsManager().playWinAudio();
         gameController.stopGame();
         winMessage = gameController.opportunities == 5 ? 'Impecable' : 'Sigue mejorando';
         openWinDialog();
@@ -252,6 +259,7 @@ class _GameViewState extends State<GameView> {
   }
 
   void endGame() {
+    widget.settingsManager.getAudioSettingsManager().stopAudio();
     Navigator.pop(context);
     Navigator.pop(context);
   }

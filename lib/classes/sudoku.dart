@@ -10,21 +10,21 @@ class Sudoku {
   Sudoku.easy() {
     availableHints = 5;
     maxPossibleErrors = 5;
-    countdown = 180; //im not sure
+    countdown = 300;
     maxVisibleValues = maxEasyLevel;
   }
 
   Sudoku.medium() {
-    availableHints = 3;
+    availableHints = 4;
     maxPossibleErrors = 5;
-    countdown = 180; //im not sure
+    countdown = 600;
     maxVisibleValues = maxMediumLevel;
   }
 
   Sudoku.hard() {
-    availableHints = 0;
+    availableHints = 3;
     maxPossibleErrors = 5;
-    countdown = 180; //im not sure
+    countdown = 900;
     maxVisibleValues = maxHardLevel;
   }
 

@@ -26,6 +26,7 @@ class _GameModesState extends State<GameModes> {
   List<bool> timeMode = [true, false];
 
   void setDifficulty(int index) {
+    widget.settingsManager.getAudioSettingsManager().playGameModeAudio();
     difficulty = [false, false, false];
     setState(() {
       difficulty[index] = true;
@@ -33,6 +34,7 @@ class _GameModesState extends State<GameModes> {
   }
 
   void setTimeMode(int index) {
+    widget.settingsManager.getAudioSettingsManager().playGameModeAudio();
     timeMode = [false, false];
     setState(() {
       timeMode[index] = true;

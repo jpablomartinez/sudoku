@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:sudoku/classes/interfaces/iaudio.dart';
 
@@ -10,6 +12,7 @@ class AudioSettingsManager implements IAudioSettingsManager {
   AudioSettingsManager() {
     soundsPlayer.setVolume(_audioVolume.toDouble() / 100);
     backgroundMusic.setVolume(_backroundVolume.toDouble() / 100);
+    playBackgroundLoopMusic();
   }
 
   @override
@@ -43,30 +46,52 @@ class AudioSettingsManager implements IAudioSettingsManager {
   }
 
   Future<void> playSelectAudio() async {
-    await soundsPlayer.play(AssetSource('audio/write_number.wav'));
+    await soundsPlayer.play(AssetSource('audio/ui_woosh.wav'));
+  }
+
+  Future<void> playWriteNumber() async {
+    int index = math.Random().nextInt(3) + 1;
+    await soundsPlayer.play(AssetSource('audio/write$index.mp3'));
   }
 
   Future<void> playWinAudio() async {
-    //await soundsPlayer.play(AssetSource('audio/select.wav'));
+    await backgroundMusic.stop();
+    await soundsPlayer.play(AssetSource('audio/win.mp3'));
   }
 
-  void playBackgroundLoopAudio() {}
-
-  Future<void> playWriteNumberAudio() async {
-    await soundsPlayer.play(AssetSource('audio/write_number.wav'));
+  Future<void> playGameOverAudio() async {
+    await backgroundMusic.stop();
+    await soundsPlayer.play(AssetSource('audio/gameover.mp3'));
   }
-
-  void playMainBackgroundAudio() {}
 
   Future<void> playEraseAudio() async {
-    await soundsPlayer.play(AssetSource('audio/erase.wav'));
+    await soundsPlayer.play(AssetSource('audio/erase.mp3'));
   }
 
   Future<void> playHintAudio() async {
     await soundsPlayer.play(AssetSource('audio/hint.wav'));
   }
 
-  Future<void> playGameModeBackgroundAudio() async {
-    //await backgroundMusic.play(AssetSource('audio/game_mode.wav'));
+  Future<void> playGameModeAudio() async {
+    await soundsPlayer.play(AssetSource('audio/game-mode.mp3'));
+  }
+
+  Future<void> playBackgroundLoopMusic() async {
+    backgroundMusic.onPlayerComplete.listen(handleLoopMusic);
+  }
+
+  void handleLoopMusic(void_) {
+    playBackgroundMusic();
+  }
+
+  Future<void> playBackgroundMusic() async {
+    int rand = Random().nextInt(2) + 1;
+    String audio = 'audio/bg-sound-$rand.mp3';
+    await backgroundMusic.play(AssetSource(audio));
+  }
+
+  Future<void> stopAudio() async {
+    await backgroundMusic.stop();
+    await soundsPlayer.stop();
   }
 }

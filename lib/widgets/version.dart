@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/colors.dart';
 
-const String version = '0.6.0';
+const String version = '0.7.0';
 
 class VersionApp extends StatelessWidget {
   final double fontSize;

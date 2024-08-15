@@ -179,7 +179,7 @@ class _RecordsViewState extends State<RecordsView> {
                             ),
                             RecordInfo(
                               icon: 'assets/icons/timer.png',
-                              label: 'Mejor Tiempo',
+                              label: 'Tiempo al ganar',
                               amount: formatTimer(gameResults[0].time ?? 0),
                               chipColor: const Color(0xff834BFA),
                               size: size,
@@ -231,7 +231,7 @@ class _RecordsViewState extends State<RecordsView> {
                             ),
                             RecordInfo(
                               icon: 'assets/icons/timer.png',
-                              label: 'Mejor Tiempo',
+                              label: 'Tiempo al ganar',
                               amount: formatTimer(gameResults[1].time ?? 0),
                               chipColor: const Color(0xff834BFA),
                               size: size,
@@ -283,7 +283,7 @@ class _RecordsViewState extends State<RecordsView> {
                             ),
                             RecordInfo(
                               icon: 'assets/icons/timer.png',
-                              label: 'Mejor Tiempo',
+                              label: 'Tiempo al ganar',
                               amount: formatTimer(gameResults[2].time ?? 0),
                               chipColor: const Color(0xff834BFA),
                               size: size,
